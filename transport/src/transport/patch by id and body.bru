@@ -1,0 +1,46 @@
+meta {
+  name: patch by id and body
+  type: http
+  seq: 5
+}
+
+patch {
+  url: http://localhost:5006/api/v1/transports/4
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "transportName": "Harshi Freight Carriers",
+    "contactDetails": "+91-7980140018",
+    "vehicles": [
+      {
+        "builtNumber": "TN10PQ2345",
+        "driverName": "Manoj Iyer",
+        "driverContact": "9000011111"
+      },
+      {
+        "builtNumber": "AP09RS6789",
+        "driverName": "Venkatesh Naidu",
+        "driverContact": "9333344444"
+      },
+      {
+        "builtNumber": "GJ05UV4321",
+        "driverName": "Harsh Patel",
+        "driverContact": "9555566666"
+      },
+      {
+        "builtNumber": "GJ05UV5341",
+        "driverName": "Siddhanath Dubey",
+        "driverContact": "7995555666"
+      }
+    ]
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

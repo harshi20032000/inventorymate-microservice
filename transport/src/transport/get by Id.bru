@@ -1,0 +1,16 @@
+meta {
+  name: get by Id
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:5006/api/v1/transports/4
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

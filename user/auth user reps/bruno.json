@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "auth user reps",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

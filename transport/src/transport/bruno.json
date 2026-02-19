@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "transport",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

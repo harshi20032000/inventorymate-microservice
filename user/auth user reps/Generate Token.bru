@@ -1,0 +1,23 @@
+meta {
+  name: Generate Token
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:5007/generate-token
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "harshi123",
+    "password": "Password@123"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,27 @@
+meta {
+  name: Register User
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:5007/api/v1/admin/register-viewer
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzE1MzQ5MDEsImV4cCI6MTc3MTUzNTgwMX0.mTteG-O-o1lpUNRJ1BgCU0czpz12zqUC_4aEwMZnEgo
+}
+
+body:json {
+  {
+    "username": "viewer31",
+    "password": "Password@123"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

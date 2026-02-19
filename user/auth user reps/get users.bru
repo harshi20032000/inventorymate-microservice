@@ -1,0 +1,24 @@
+meta {
+  name: get users
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://localhost:5007/api/v1/admin/users?role=ROLE_VIEW
+  body: none
+  auth: bearer
+}
+
+params:query {
+  role: ROLE_VIEW
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzE1MzQ5MDEsImV4cCI6MTc3MTUzNTgwMX0.mTteG-O-o1lpUNRJ1BgCU0czpz12zqUC_4aEwMZnEgo
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

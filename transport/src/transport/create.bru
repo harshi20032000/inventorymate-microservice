@@ -1,0 +1,41 @@
+meta {
+  name: create
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:5006/api/v1/transports
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "transportName": "Ganga Freight Carriers",
+    "contactDetails": "+91-8045678901",
+    "vehicles": [
+      {
+        "builtNumber": "TN10PQ2345",
+        "driverName": "Manoj Iyer",
+        "driverContact": "9000011111"
+      },
+      {
+        "builtNumber": "AP09RS6789",
+        "driverName": "Venkatesh Naidu",
+        "driverContact": "9333344444"
+      },
+      {
+        "builtNumber": "GJ05UV4321",
+        "driverName": "Harsh Patel",
+        "driverContact": "9555566666"
+      }
+    ]
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

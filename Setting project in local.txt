@@ -1,0 +1,72 @@
+InventryMate modernisation
+
+Order		-5001
+Party		-5002
+Payment		-5003
+Product		-5004
+Reps		-5005
+Transport	-5006
+User		-5007
+Warehouse	-5008
+
+Later use font - frutiger
+
+
+
+1. Create the respective schema in local. 
+
+
+For Transport use the following request bodies
+
+{
+  "transportName": "Sharma Logistics",
+  "contactDetails": "9876543210",
+  "vehicles": [
+    {
+      "builtNumber": "MH12AB1234",
+      "driverName": "Ravi Kumar",
+      "driverContact": "9898989898"
+    }
+  ]
+}
+
+
+{
+  "transportName": "Sri Balaji Transport",
+  "contactDetails": "contact@sbtindia.com",
+  "vehicles": [
+    {
+      "builtNumber": "KA03MN4567",
+      "driverName": "Suresh Reddy",
+      "driverContact": "9123456780"
+    },
+    {
+      "builtNumber": "DL01XY7890",
+      "driverName": "Amit Verma",
+      "driverContact": "9988776655"
+    }
+  ]
+}
+
+
+{
+  "transportName": "Ganga Freight Carriers",
+  "contactDetails": "+91-8045678901",
+  "vehicles": [
+    {
+      "builtNumber": "TN10PQ2345",
+      "driverName": "Manoj Iyer",
+      "driverContact": "9000011111"
+    },
+    {
+      "builtNumber": "AP09RS6789",
+      "driverName": "Venkatesh Naidu",
+      "driverContact": "9333344444"
+    },
+    {
+      "builtNumber": "GJ05UV4321",
+      "driverName": "Harsh Patel",
+      "driverContact": "9555566666"
+    }
+  ]
+}

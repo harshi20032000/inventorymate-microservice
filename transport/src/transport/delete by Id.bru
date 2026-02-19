@@ -1,0 +1,15 @@
+meta {
+  name: delete by Id
+  type: http
+  seq: 4
+}
+
+delete {
+  url: http://localhost:5006/api/v1/transports/3
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}
