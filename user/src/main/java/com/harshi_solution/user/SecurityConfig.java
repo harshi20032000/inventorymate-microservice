@@ -18,8 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.harshi_solution.user.authenticationEntryPoint.CustomAccessDeniedHandler;
 import com.harshi_solution.user.authenticationEntryPoint.CustomAuthenticationEntryPoint;
 import com.harshi_solution.user.authenticationProvider.JWTAuthenticationProvider;
-import com.harshi_solution.user.filter.JWTAuthenticationFilter;
-import com.harshi_solution.user.filter.JWTRefreshFilter;
 import com.harshi_solution.user.filter.JWTValidationFilter;
 import com.harshi_solution.user.util.JWTUtil;
 
@@ -27,76 +25,71 @@ import com.harshi_solution.user.util.JWTUtil;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private JWTUtil jwtUtil;
-    private UserDetailsService userDetailsService;
-    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-    private CustomAccessDeniedHandler customAccessDeniedHandler;
+        private JWTUtil jwtUtil;
+        private UserDetailsService userDetailsService;
+        private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+        private CustomAccessDeniedHandler customAccessDeniedHandler;
 
-    public SecurityConfig(JWTUtil jwtUtil, UserDetailsService userDetailsService,
-            CustomAuthenticationEntryPoint customAuthenticationEntryPoint,
-            CustomAccessDeniedHandler customAccessDeniedHandler) {
-        this.jwtUtil = jwtUtil;
-        this.userDetailsService = userDetailsService;
-        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
-        this.customAccessDeniedHandler = customAccessDeniedHandler;
-    }
+        public SecurityConfig(JWTUtil jwtUtil, UserDetailsService userDetailsService,
+                        CustomAuthenticationEntryPoint customAuthenticationEntryPoint,
+                        CustomAccessDeniedHandler customAccessDeniedHandler) {
+                this.jwtUtil = jwtUtil;
+                this.userDetailsService = userDetailsService;
+                this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
+                this.customAccessDeniedHandler = customAccessDeniedHandler;
+        }
 
-    @Bean
-    public JWTAuthenticationProvider jwtAuthenticationProvider() {
-        return new JWTAuthenticationProvider(jwtUtil, userDetailsService);
-    }
+        @Bean
+        public JWTAuthenticationProvider jwtAuthenticationProvider() {
+                return new JWTAuthenticationProvider(jwtUtil, userDetailsService);
+        }
 
-    @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(
-            PasswordEncoder passwordEncoder) {
+        @Bean
+        public DaoAuthenticationProvider daoAuthenticationProvider(
+                        PasswordEncoder passwordEncoder) {
 
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
+                DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
 
-        provider.setPasswordEncoder(passwordEncoder);
-        return provider;
-    }
+                provider.setPasswordEncoder(passwordEncoder);
+                return provider;
+        }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager,
-            JWTUtil jwtUtil) throws Exception {
+        @Bean
+        public SecurityFilterChain securityFilterChain(
+                        HttpSecurity http,
+                        AuthenticationManager authenticationManager) throws Exception {
 
-        // Authentication filter responsible for login
-        JWTAuthenticationFilter jwtAuthFilter = new JWTAuthenticationFilter(authenticationManager, jwtUtil);
+                JWTValidationFilter jwtValidationFilter = new JWTValidationFilter(authenticationManager);
 
-        // Validation filter for checking JWT in every request
-        JWTValidationFilter jwtValidationFilter = new JWTValidationFilter(authenticationManager);
+                http.authorizeHttpRequests(auth -> auth
+                                .requestMatchers("/api/v1/user/login").permitAll()
+                                .requestMatchers("/api/v1/user/refresh-token").permitAll()
+                                .requestMatchers("/api/v1/user/change-password").authenticated()
+                                .requestMatchers("/api/v1/user/log-out").authenticated()
+                                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                                .anyRequest().authenticated())
+                                .sessionManagement(session -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                .csrf(csrf -> csrf.disable())
+                                .exceptionHandling(ex -> ex
+                                                .authenticationEntryPoint(customAuthenticationEntryPoint)
+                                                .accessDeniedHandler(customAccessDeniedHandler))
+                                // 👇 Only one filter now
+                                .addFilterBefore(jwtValidationFilter,
+                                                UsernamePasswordAuthenticationFilter.class);
 
-        // refresh filter for checking JWT in every request
-        JWTRefreshFilter jwtRefreshFilter = new JWTRefreshFilter(jwtUtil, authenticationManager);
+                return http.build();
+        }
 
-        http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/v1/user/login", "/api/v1/user/change-password", "/api/v1/user/log-out")
-                .permitAll()
-                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated())
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .csrf(csrf -> csrf.disable())
-                .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(customAuthenticationEntryPoint))
-                .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(customAuthenticationEntryPoint)
-                        .accessDeniedHandler(customAccessDeniedHandler))
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // generate token filter
-                .addFilterAfter(jwtValidationFilter, JWTAuthenticationFilter.class) // validate token filter
-                .addFilterAfter(jwtRefreshFilter, JWTValidationFilter.class); // refresh token filter
-        return http.build();
-    }
+        @Bean
+        public AuthenticationManager authenticationManager(
+                        DaoAuthenticationProvider daoAuthenticationProvider,
+                        JWTAuthenticationProvider jwtAuthenticationProvider) {
 
-    @Bean
-    public AuthenticationManager authenticationManager(
-            DaoAuthenticationProvider daoAuthenticationProvider,
-            JWTAuthenticationProvider jwtAuthenticationProvider) {
-
-        return new ProviderManager(
-                Arrays.asList(
-                        daoAuthenticationProvider,
-                        jwtAuthenticationProvider));
-    }
+                return new ProviderManager(
+                                Arrays.asList(
+                                                daoAuthenticationProvider,
+                                                jwtAuthenticationProvider));
+        }
 
 }
