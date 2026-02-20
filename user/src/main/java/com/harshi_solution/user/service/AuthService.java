@@ -8,15 +8,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.harshi_solution.user.dto.AuthResponseDTO;
 import com.harshi_solution.user.dto.ChangePasswordRequest;
 import com.harshi_solution.user.dto.LoginRequest;
 import com.harshi_solution.user.entities.UserRegisterEntity;
 import com.harshi_solution.user.repo.UserRegisterEntityRepository;
 import com.harshi_solution.user.util.JWTUtil;
-
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 @Service
 @Transactional
@@ -38,8 +35,7 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void login(LoginRequest request,
-            HttpServletResponse response) {
+    public AuthResponseDTO login(LoginRequest request) {
 
         Authentication authResult = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -49,20 +45,10 @@ public class AuthService {
         String username = authResult.getName();
 
         String accessToken = jwtUtil.generateAccessToken(username);
-
         String refreshToken = jwtUtil.generateRefreshToken(username);
 
-        response.setHeader("Authorization",
-                "Bearer " + accessToken);
+        return new AuthResponseDTO(accessToken, refreshToken);
 
-        Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
-
-        refreshCookie.setHttpOnly(true);
-        refreshCookie.setSecure(true);
-        refreshCookie.setPath("/api/v1/user/refresh-token");
-        refreshCookie.setMaxAge(7 * 24 * 60 * 60);
-
-        response.addCookie(refreshCookie);
     }
 
     public void changePassword(ChangePasswordRequest request) {
@@ -88,27 +74,11 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    public void logout(HttpServletResponse response) {
+    public AuthResponseDTO refreshToken(
+            AuthResponseDTO request) {
 
-        Cookie cookie = new Cookie("refreshToken", null);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        cookie.setPath("/api/v1/user/refresh-token");
-        cookie.setMaxAge(0);
-
-        response.addCookie(cookie);
-    }
-
-    public void refreshToken(HttpServletRequest request,
-            HttpServletResponse response) {
-
-        String refreshToken = extractRefreshTokenFromCookies(request);
-
-        if (refreshToken == null) {
-            throw new RuntimeException("Refresh token missing");
-        }
-
-        String username = jwtUtil.validateAndExtractUsername(refreshToken);
+        String username = jwtUtil.validateAndExtractUsername(
+                request.getRefreshToken());
 
         if (username == null) {
             throw new RuntimeException("Invalid refresh token");
@@ -116,23 +86,10 @@ public class AuthService {
 
         String newAccessToken = jwtUtil.generateAccessToken(username);
 
-        response.setHeader("Authorization",
-                "Bearer " + newAccessToken);
-    }
+        String newRefreshToken = jwtUtil.generateRefreshToken(username);
 
-    private String extractRefreshTokenFromCookies(
-            HttpServletRequest request) {
+        return new AuthResponseDTO(newAccessToken, newRefreshToken);
 
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null)
-            return null;
-
-        for (Cookie cookie : cookies) {
-            if ("refreshToken".equals(cookie.getName())) {
-                return cookie.getValue();
-            }
-        }
-        return null;
     }
 
 }

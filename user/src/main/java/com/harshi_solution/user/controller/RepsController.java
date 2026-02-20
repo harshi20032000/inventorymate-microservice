@@ -56,10 +56,10 @@ public class RepsController {
      @Operation(summary = "update Rep by Id and Body", description = "used to update Rep by Id and Body")
     @PatchMapping("/{repId}")
     public BaseUIResponse<RepResponseDTO> updateRep(
-            @PathVariable Long RepId,
+            @PathVariable Long repId,
             @Valid @RequestBody RepRequestDTO RepRequest) {
 
-        RepResponseDTO updatedRep = repsService.updateRep(RepId, RepRequest);
+        RepResponseDTO updatedRep = repsService.updateRep(repId, RepRequest);
 
         BaseUIResponse<RepResponseDTO> response = new BaseUIResponse<>();
         response.setResponsePayload(updatedRep);
@@ -70,13 +70,13 @@ public class RepsController {
     @Operation(summary = "delete Rep using Id", description = "used to delete Rep using Id")
     @DeleteMapping("/{repId}")
     public BaseUIResponse<String> deleteRep(
-            @PathVariable Long RepId) {
+            @PathVariable Long repId) {
 
-        repsService.deleteRepById(RepId);
+        repsService.deleteRepById(repId);
 
         BaseUIResponse<String> response = new BaseUIResponse<>();
         response.setResponsePayload(
-                "Rep with ID " + RepId + " deleted successfully.");
+                "Rep with ID " + repId + " deleted successfully.");
 
         return response;
     }

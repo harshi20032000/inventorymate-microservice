@@ -1,0 +1,453 @@
+{
+  "info": {
+    "_postman_id": "078f4310-7a8f-4280-a8f5-8d9d7960a444",
+    "name": "user",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "19898680"
+  },
+  "item": [
+    {
+      "name": "login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "content-type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"rahul123\",\r\n  \"password\": \"Password@12345\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5007/api/v1/user/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5007",
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "login"
+          ]
+        },
+        "description": "Generated from cURL: curl --request POST \\\r\n  --url http://localhost:5007/generate-token \\\r\n  --header 'content-type: application/json' \\\r\n  --data '{\r\n  \"username\": \"harshi123\",\r\n  \"password\": \"Password@123\"\r\n}'"
+      },
+      "response": []
+    },
+    {
+      "name": "change-password",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsImlhdCI6MTc3MTU4MTQzOSwiZXhwIjoxNzcxNTgyMzM5fQ.C4vPTmt1W7yuQAtFcmCHqUsIb7rztPs_C3sqRhEjuvU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "content-type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"oldPassword\": \"Password@123\",\r\n  \"newPassword\": \"Password@12345\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5007/api/v1/user/change-password",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5007",
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "change-password"
+          ]
+        },
+        "description": "Generated from cURL: curl --request POST \\\r\n  --url http://localhost:5007/generate-token \\\r\n  --header 'content-type: application/json' \\\r\n  --data '{\r\n  \"username\": \"harshi123\",\r\n  \"password\": \"Password@123\"\r\n}'"
+      },
+      "response": []
+    },
+    {
+      "name": "refresh-token",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "content-type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsImlhdCI6MTc3MTU4OTIwMywiZXhwIjoxNzcyMTk0MDAzfQ.mDO4_jSmcNq9gTQL-0RW2GwGonC1EG5V_ygKMiepm6Q\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5007/api/v1/user/refresh-token",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5007",
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "refresh-token"
+          ]
+        },
+        "description": "Generated from cURL: curl --request POST \\\r\n  --url http://localhost:5007/generate-token \\\r\n  --header 'content-type: application/json' \\\r\n  --data '{\r\n  \"username\": \"harshi123\",\r\n  \"password\": \"Password@123\"\r\n}'"
+      },
+      "response": []
+    },
+    {
+      "name": "log-out",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsImlhdCI6MTc3MTU4OTIwMiwiZXhwIjoxNzcxNTkwMTAyfQ.2LGWOlQVRXr2pjrVQe996L1oJFj7GY4jaiYiHyT1qRU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "content-type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:5007/api/v1/user/log-out",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5007",
+          "path": [
+            "api",
+            "v1",
+            "user",
+            "log-out"
+          ]
+        },
+        "description": "Generated from cURL: curl --request POST \\\r\n  --url http://localhost:5007/generate-token \\\r\n  --header 'content-type: application/json' \\\r\n  --data '{\r\n  \"username\": \"harshi123\",\r\n  \"password\": \"Password@123\"\r\n}'"
+      },
+      "response": []
+    },
+    {
+      "name": "v1/admin/register-viewer",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzE1MzU1NDcsImV4cCI6MTc3MTUzNjQ0N30.MIuZyl3d98F00C3_x3w_wvlT74taQDZUPi9IZCcPx8A",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzE1MzQ5MDEsImV4cCI6MTc3MTUzNTgwMX0.mTteG-O-o1lpUNRJ1BgCU0czpz12zqUC_4aEwMZnEgo"
+          },
+          {
+            "key": "content-type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"viewer51\",\r\n  \"password\": \"Password@123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5007/api/v1/admin/register-viewer",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5007",
+          "path": [
+            "api",
+            "v1",
+            "admin",
+            "register-viewer"
+          ]
+        },
+        "description": "Generated from cURL: curl --request POST \\\r\n  --url http://localhost:5007/api/v1/admin/register-viewer \\\r\n  --header 'authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzE1MzQ5MDEsImV4cCI6MTc3MTUzNTgwMX0.mTteG-O-o1lpUNRJ1BgCU0czpz12zqUC_4aEwMZnEgo' \\\r\n  --header 'content-type: application/json' \\\r\n  --data '{\r\n  \"username\": \"viewer31\",\r\n  \"password\": \"Password@123\"\r\n}'"
+      },
+      "response": []
+    },
+    {
+      "name": "v1/admin/register-reps",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzE1MzU1NDcsImV4cCI6MTc3MTUzNjQ0N30.MIuZyl3d98F00C3_x3w_wvlT74taQDZUPi9IZCcPx8A",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzE1MzQ5MDEsImV4cCI6MTc3MTUzNTgwMX0.mTteG-O-o1lpUNRJ1BgCU0czpz12zqUC_4aEwMZnEgo"
+          },
+          {
+            "key": "content-type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"repName\": \"Nishi Traders\",\r\n  \"repLocation\": \"Napoli\",\r\n  \"username\": \"napolinishi123\",\r\n  \"password\": \"Password@123\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5007/api/v1/admin/register-reps",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5007",
+          "path": [
+            "api",
+            "v1",
+            "admin",
+            "register-reps"
+          ]
+        },
+        "description": "Generated from cURL: curl --request POST \\\r\n  --url http://localhost:5007/api/v1/admin/register-viewer \\\r\n  --header 'authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzE1MzQ5MDEsImV4cCI6MTc3MTUzNTgwMX0.mTteG-O-o1lpUNRJ1BgCU0czpz12zqUC_4aEwMZnEgo' \\\r\n  --header 'content-type: application/json' \\\r\n  --data '{\r\n  \"username\": \"viewer31\",\r\n  \"password\": \"Password@123\"\r\n}'"
+      },
+      "response": []
+    },
+    {
+      "name": "v1/admin/users?role=ROLE_VIEW",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzE1ODExMTcsImV4cCI6MTc3MTU4MjAxN30.62LEpglencJM9rSUAkhdyIW2tGnWCXiM4Waknh7g1z8",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzE1MzQ5MDEsImV4cCI6MTc3MTUzNTgwMX0.mTteG-O-o1lpUNRJ1BgCU0czpz12zqUC_4aEwMZnEgo"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:5007/api/v1/admin/users?role=ROLE_ADMIN",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5007",
+          "path": [
+            "api",
+            "v1",
+            "admin",
+            "users"
+          ],
+          "query": [
+            {
+              "key": "role",
+              "value": "ROLE_ADMIN"
+            }
+          ]
+        },
+        "description": "Generated from cURL: curl --request GET \\\r\n  --url 'http://localhost:5007/api/v1/admin/users?role=ROLE_VIEW' \\\r\n  --header 'authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzE1MzQ5MDEsImV4cCI6MTc3MTUzNTgwMX0.mTteG-O-o1lpUNRJ1BgCU0czpz12zqUC_4aEwMZnEgo'"
+      },
+      "response": []
+    },
+    {
+      "name": "get All Reps",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsImlhdCI6MTc3MTU5MDU2MiwiZXhwIjoxNzcxNTkxNDYyfQ.KFqq2tnTL7s47JrHmwg48q2VKVNQRCr1hcxbZDUx6RU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5007/api/v1/reps",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5007",
+          "path": [
+            "api",
+            "v1",
+            "reps"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get Reps By Id",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsImlhdCI6MTc3MTU5MDU2MiwiZXhwIjoxNzcxNTkxNDYyfQ.KFqq2tnTL7s47JrHmwg48q2VKVNQRCr1hcxbZDUx6RU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5007/api/v1/reps",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5007",
+          "path": [
+            "api",
+            "v1",
+            "reps"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "update reps",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsImlhdCI6MTc3MTU5MjE2MiwiZXhwIjoxNzcxNTkzMDYyfQ.UjOHOumiD6riaqumJJIuvuzbWeioWatQzpP1vMMekxc",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"repLocation\": \"NAPOLI\",\r\n    \"repName\": \"NISHA Ventures\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5007/api/v1/reps/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5007",
+          "path": [
+            "api",
+            "v1",
+            "reps",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete reps by id",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsImlhdCI6MTc3MTU5MjE2MiwiZXhwIjoxNzcxNTkzMDYyfQ.UjOHOumiD6riaqumJJIuvuzbWeioWatQzpP1vMMekxc",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5007/api/v1/reps/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5007",
+          "path": [
+            "api",
+            "v1",
+            "reps",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

@@ -1,17 +1,17 @@
 package com.harshi_solution.user.controller;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.harshi_solution.user.dto.AuthResponseDTO;
+import com.harshi_solution.user.dto.BaseUIResponse;
 import com.harshi_solution.user.dto.ChangePasswordRequest;
 import com.harshi_solution.user.dto.LoginRequest;
 import com.harshi_solution.user.service.AuthService;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -24,35 +24,42 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(
-            @RequestBody LoginRequest request,
-            HttpServletResponse response) {
+    public BaseUIResponse<AuthResponseDTO> login(
+            @RequestBody LoginRequest request) {
+        BaseUIResponse<AuthResponseDTO> response = new BaseUIResponse<>();
 
-        authService.login(request, response);
-        return ResponseEntity.ok("Login successful");
+        response.setResponsePayload(authService.login(request));
+
+        return response;
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<?> changePassword(
+    public BaseUIResponse<?> changePassword(
             @RequestBody ChangePasswordRequest request) {
 
         authService.changePassword(request);
-        return ResponseEntity.ok("Password changed successfully");
+        BaseUIResponse<String> response = new BaseUIResponse<>();
+        response.setResponsePayload("Password changed successfully");
+        return response;
     }
+    @GetMapping("/log-out")
+    public BaseUIResponse<Void> logout() {
 
-    @PostMapping("/log-out")
-    public ResponseEntity<?> logout(HttpServletResponse response) {
+        BaseUIResponse<Void> response = new BaseUIResponse<>();
 
-        authService.logout(response);
-        return ResponseEntity.ok("Logged out successfully");
+        response.setEmptyResponsePayload();
+
+        return response;
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<?> refreshToken(
-            HttpServletRequest request,
-            HttpServletResponse response) {
+    public BaseUIResponse<AuthResponseDTO> refreshToken(
+           @RequestBody AuthResponseDTO request) {
 
-        authService.refreshToken(request, response);
-        return ResponseEntity.ok("Token refreshed successfully");
+        BaseUIResponse<AuthResponseDTO> response = new BaseUIResponse<>();
+
+        response.setResponsePayload(authService.refreshToken(request));
+
+        return response;
     }
 }
