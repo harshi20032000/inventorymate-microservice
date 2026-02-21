@@ -1,0 +1,151 @@
+{
+  "info": {
+    "_postman_id": "6f309b59-7158-427c-b0c6-44d3bd77a2b0",
+    "name": "Transport",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "19898680"
+  },
+  "item": [
+    {
+      "name": "create",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "content-type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"transportName\": \"Ganga Freight Carriers\",\r\n  \"contactDetails\": \"+91-8045678901\",\r\n  \"vehicles\": [\r\n    {\r\n      \"builtNumber\": \"TN10PQ2345\",\r\n      \"driverName\": \"Manoj Iyer\",\r\n      \"driverContact\": \"9000011111\"\r\n    },\r\n    {\r\n      \"builtNumber\": \"AP09RS6789\",\r\n      \"driverName\": \"Venkatesh Naidu\",\r\n      \"driverContact\": \"9333344444\"\r\n    },\r\n    {\r\n      \"builtNumber\": \"GJ05UV4321\",\r\n      \"driverName\": \"Harsh Patel\",\r\n      \"driverContact\": \"9555566666\"\r\n    }\r\n  ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5006/api/v1/transports",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5006",
+          "path": [
+            "api",
+            "v1",
+            "transports"
+          ]
+        },
+        "description": "Generated from cURL: curl --request POST \\\r\n  --url http://localhost:5006/api/v1/transports \\\r\n  --header 'content-type: application/json' \\\r\n  --data '{\r\n  \"transportName\": \"Ganga Freight Carriers\",\r\n  \"contactDetails\": \"+91-8045678901\",\r\n  \"vehicles\": [\r\n    {\r\n      \"builtNumber\": \"TN10PQ2345\",\r\n      \"driverName\": \"Manoj Iyer\",\r\n      \"driverContact\": \"9000011111\"\r\n    },\r\n    {\r\n      \"builtNumber\": \"AP09RS6789\",\r\n      \"driverName\": \"Venkatesh Naidu\",\r\n      \"driverContact\": \"9333344444\"\r\n    },\r\n    {\r\n      \"builtNumber\": \"GJ05UV4321\",\r\n      \"driverName\": \"Harsh Patel\",\r\n      \"driverContact\": \"9555566666\"\r\n    }\r\n  ]\r\n}'"
+      },
+      "response": []
+    },
+    {
+      "name": "get by id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5006/api/v1/transports/4",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5006",
+          "path": [
+            "api",
+            "v1",
+            "transports",
+            "4"
+          ]
+        },
+        "description": "Generated from cURL: curl --request GET \\\r\n  --url http://localhost:5006/api/v1/transports/4"
+      },
+      "response": []
+    },
+    {
+      "name": "get all",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5006/api/v1/transports",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5006",
+          "path": [
+            "api",
+            "v1",
+            "transports"
+          ]
+        },
+        "description": "Generated from cURL: curl --request GET \\\r\n  --url http://localhost:5006/api/v1/transports"
+      },
+      "response": []
+    },
+    {
+      "name": "patch",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "content-type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"transportName\": \"Harshi Freight Carriers\",\r\n  \"contactDetails\": \"+91-7980140018\",\r\n  \"vehicles\": [\r\n    {\r\n      \"builtNumber\": \"TN10PQ2345\",\r\n      \"driverName\": \"Manoj Iyer\",\r\n      \"driverContact\": \"9000011111\"\r\n    },\r\n    {\r\n      \"builtNumber\": \"AP09RS6789\",\r\n      \"driverName\": \"Venkatesh Naidu\",\r\n      \"driverContact\": \"9333344444\"\r\n    },\r\n    {\r\n      \"builtNumber\": \"GJ05UV4321\",\r\n      \"driverName\": \"Harsh Patel\",\r\n      \"driverContact\": \"9555566666\"\r\n    },\r\n    {\r\n      \"builtNumber\": \"GJ05UV5341\",\r\n      \"driverName\": \"Siddhanath Dubey\",\r\n      \"driverContact\": \"7995555666\"\r\n    }\r\n  ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5006/api/v1/transports/4",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5006",
+          "path": [
+            "api",
+            "v1",
+            "transports",
+            "4"
+          ]
+        },
+        "description": "Generated from cURL: curl --request PATCH \\\r\n  --url http://localhost:5006/api/v1/transports/4 \\\r\n  --header 'content-type: application/json' \\\r\n  --data '{\r\n  \"transportName\": \"Harshi Freight Carriers\",\r\n  \"contactDetails\": \"+91-7980140018\",\r\n  \"vehicles\": [\r\n    {\r\n      \"builtNumber\": \"TN10PQ2345\",\r\n      \"driverName\": \"Manoj Iyer\",\r\n      \"driverContact\": \"9000011111\"\r\n    },\r\n    {\r\n      \"builtNumber\": \"AP09RS6789\",\r\n      \"driverName\": \"Venkatesh Naidu\",\r\n      \"driverContact\": \"9333344444\"\r\n    },\r\n    {\r\n      \"builtNumber\": \"GJ05UV4321\",\r\n      \"driverName\": \"Harsh Patel\",\r\n      \"driverContact\": \"9555566666\"\r\n    },\r\n    {\r\n      \"builtNumber\": \"GJ05UV5341\",\r\n      \"driverName\": \"Siddhanath Dubey\",\r\n      \"driverContact\": \"7995555666\"\r\n    }\r\n  ]\r\n}'"
+      },
+      "response": []
+    },
+    {
+      "name": "delete",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5006/api/v1/transports/3",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5006",
+          "path": [
+            "api",
+            "v1",
+            "transports",
+            "3"
+          ]
+        },
+        "description": "Generated from cURL: curl --request DELETE \\\r\n  --url http://localhost:5006/api/v1/transports/3"
+      },
+      "response": []
+    }
+  ]
+}
