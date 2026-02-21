@@ -1,0 +1,142 @@
+{
+  "info": {
+    "_postman_id": "9dd0556c-4371-4d17-97e4-27bb87f7b49c",
+    "name": "Product",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "19898680"
+  },
+  "item": [
+    {
+      "name": "create",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"productName\": \"Coffee Table\",\r\n    \"productCode\": \"CT70\",\r\n    \"basePrice\": 130.00,\r\n    \"pType\": \"FURNITURE\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5004/api/v1/products",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5004",
+          "path": [
+            "api",
+            "v1",
+            "products"
+          ]
+        },
+        "description": "Generated from cURL: curl --location 'http://localhost:8080/api/v1/products' \\\r\n--header 'Content-Type: application/json' \\\r\n--data '{\r\n  \"productName\": \"Laptop Pro 15\",\r\n  \"productCode\": \"LP15\",\r\n  \"basePrice\": 1200.00,\r\n  \"pType\": \"ELECTRONICS\"\r\n}'"
+      },
+      "response": []
+    },
+    {
+      "name": "get all",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5004/api/v1/products",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5004",
+          "path": [
+            "api",
+            "v1",
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get by Id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5004/api/v1/products/13",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5004",
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "13"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "put",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"basePrice\": 130.00,\r\n    \"productCode\": \"CT70\",\r\n    \"productName\": \"Coffee Table\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5004/api/v1/products/13",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5004",
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "13"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "delete",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5004/api/v1/products/13",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5004",
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "13"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
