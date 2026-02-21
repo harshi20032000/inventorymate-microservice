@@ -1,0 +1,189 @@
+{
+  "info": {
+    "_postman_id": "ccebbd24-7bd0-4b1a-aecd-fc224973fee1",
+    "name": "warehouse",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "19898680"
+  },
+  "item": [
+    {
+      "name": "create",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"wareName\": \"Howrah\",\r\n  \"wareCode\": \"HW01\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5008/api/v1/warehouses",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5008",
+          "path": [
+            "api",
+            "v1",
+            "warehouses"
+          ]
+        },
+        "description": "Generated from cURL: curl --location 'http://localhost:8080/api/v1/warehouses' \\\r\n--header 'Content-Type: application/json' \\\r\n--data '{\r\n  \"wareName\": \"CentralHub\",\r\n  \"wareCode\": \"CH01\"\r\n}'"
+      },
+      "response": []
+    },
+    {
+      "name": "get all",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5008/api/v1/warehouses",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5008",
+          "path": [
+            "api",
+            "v1",
+            "warehouses"
+          ]
+        },
+        "description": "Generated from cURL: curl --location 'http://localhost:8080/api/v1/warehouses'"
+      },
+      "response": []
+    },
+    {
+      "name": "get by id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5008/api/v1/warehouses/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5008",
+          "path": [
+            "api",
+            "v1",
+            "warehouses",
+            "1"
+          ]
+        },
+        "description": "Generated from cURL: curl --location 'http://localhost:8080/api/v1/warehouses/1'"
+      },
+      "response": []
+    },
+    {
+      "name": "put",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"wareName\": \"CentralHubUpd\",\r\n  \"wareCode\": \"CHU02\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5008/api/v1/warehouses/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5008",
+          "path": [
+            "api",
+            "v1",
+            "warehouses",
+            "1"
+          ]
+        },
+        "description": "Generated from cURL: curl --location --request PUT 'http://localhost:8080/api/v1/warehouses/1' \\\r\n--header 'Content-Type: application/json' \\\r\n--data '{\r\n  \"wareName\": \"CentralHubUpdated\",\r\n  \"wareCode\": \"CH02\"\r\n}'"
+      },
+      "response": []
+    },
+    {
+      "name": "patch",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"10\": 50,\r\n  \"15\": 30\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5008/api/v1/warehouses/1/products",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5008",
+          "path": [
+            "api",
+            "v1",
+            "warehouses",
+            "1",
+            "products"
+          ]
+        },
+        "description": "Generated from cURL: curl --location --request PATCH 'http://localhost:8080/api/v1/warehouses/1/products' \\\r\n--header 'Content-Type: application/json' \\\r\n--data '{\r\n  \"10\": 50,\r\n  \"15\": 30\r\n}'"
+      },
+      "response": []
+    },
+    {
+      "name": "delete",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5008/api/v1/warehouses/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5008",
+          "path": [
+            "api",
+            "v1",
+            "warehouses",
+            "1"
+          ]
+        },
+        "description": "Generated from cURL: curl --location --request DELETE 'http://localhost:8080/api/v1/warehouses/1'"
+      },
+      "response": []
+    }
+  ]
+}
