@@ -2,11 +2,13 @@ package com.harshi_solution.order.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.harshi_solution.order.dto.AddLineItemRequest;
 import com.harshi_solution.order.dto.AddPaymentRequest;
 import com.harshi_solution.order.dto.CreateOrderRequest;
 import com.harshi_solution.order.dto.OrderResponseDTO;
-
+@Service
 public interface OrderService {
 
     OrderResponseDTO createOrder(CreateOrderRequest request);
