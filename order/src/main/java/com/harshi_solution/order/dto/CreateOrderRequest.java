@@ -35,6 +35,4 @@ public class CreateOrderRequest {
     public void setTransportId(Long transportId) {
         this.transportId = transportId;
     }
-
-    // getters & setters
 }

@@ -2,7 +2,6 @@ package com.harshi_solution.order.dto;
 
 
 import java.math.BigDecimal;
-import java.util.Map;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -18,9 +17,6 @@ public class AddLineItemRequest {
     @NotNull
     @Positive
     private BigDecimal rate;
-
-    // Optional: warehouse distribution
-    private Map<Long, Integer> warehouseQuantities;
 
     public Long getProductId() {
         return productId;
@@ -45,15 +41,5 @@ public class AddLineItemRequest {
     public void setRate(BigDecimal rate) {
         this.rate = rate;
     }
-
-    public Map<Long, Integer> getWarehouseQuantities() {
-        return warehouseQuantities;
-    }
-
-    public void setWarehouseQuantities(Map<Long, Integer> warehouseQuantities) {
-        this.warehouseQuantities = warehouseQuantities;
-    }
-
-    // getters & setters
     
 }
