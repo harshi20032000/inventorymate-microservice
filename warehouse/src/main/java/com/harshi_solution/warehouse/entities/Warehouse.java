@@ -52,10 +52,10 @@ public class Warehouse {
     }
 
     public Warehouse() {
-        // Default constructor
+
     }
 
-    public Warehouse(String wareName, String wareCode) { // Update constructor
+    public Warehouse(String wareName, String wareCode) {
         this.wareName = wareName;
         this.wareCode = wareCode;
     }
@@ -78,11 +78,11 @@ public class Warehouse {
         this.wareName = wareName;
     }
 
-    public String getWareCode() { // Add getter for wareCode
+    public String getWareCode() {
         return wareCode;
     }
 
-    public void setWareCode(String wareCode) { // Add setter for wareCode
+    public void setWareCode(String wareCode) {
         this.wareCode = wareCode;
     }
 

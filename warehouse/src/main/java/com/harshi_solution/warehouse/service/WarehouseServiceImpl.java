@@ -1,14 +1,17 @@
 package com.harshi_solution.warehouse.service;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.harshi_solution.warehouse.dto.StockAllocationResponse;
 import com.harshi_solution.warehouse.dto.WarehouseRequestDTO;
 import com.harshi_solution.warehouse.dto.WarehouseResponseDTO;
 import com.harshi_solution.warehouse.entities.Warehouse;
+import com.harshi_solution.warehouse.exception.InsufficientStockException;
 import com.harshi_solution.warehouse.repo.WarehouseRepo;
 
 @Service
@@ -92,5 +95,49 @@ public class WarehouseServiceImpl implements WarehouseService {
         dto.setProductQuantities(warehouse.getProductQuantities());
 
         return dto;
+    }
+
+    @Override
+    public StockAllocationResponse allocateStock(Long productId, int quantity) {
+
+        List<Warehouse> warehouses = warehouseRepository.findAll();
+
+        int totalAvailable = warehouses.stream()
+                .map(w -> w.getProductQuantities().getOrDefault(productId, 0))
+                .mapToInt(Integer::intValue)
+                .sum();
+
+        if (totalAvailable < quantity) {
+            throw new InsufficientStockException(
+                    "Requested: " + quantity + ", Available: " + totalAvailable);
+        }
+
+        // Now do allocation
+        int remaining = quantity;
+        Map<Long, Integer> allocation = new LinkedHashMap<>();
+
+        for (Warehouse warehouse : warehouses) {
+
+            int available = warehouse.getProductQuantities()
+                    .getOrDefault(productId, 0);
+
+            if (available <= 0)
+                continue;
+
+            int allocated = Math.min(available, remaining);
+
+            allocation.put(warehouse.getWareId(), allocated);
+
+            remaining -= allocated;
+
+            if (remaining == 0)
+                break;
+        }
+
+        return new StockAllocationResponse(
+                true,
+                quantity,
+                totalAvailable,
+                allocation);
     }
 }

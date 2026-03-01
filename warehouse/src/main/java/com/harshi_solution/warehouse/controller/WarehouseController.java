@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.harshi_solution.warehouse.dto.BaseUIResponse;
+import com.harshi_solution.warehouse.dto.StockAllocationResponse;
 import com.harshi_solution.warehouse.dto.WarehouseRequestDTO;
 import com.harshi_solution.warehouse.dto.WarehouseResponseDTO;
 import com.harshi_solution.warehouse.service.WarehouseService;
@@ -88,4 +90,10 @@ public class WarehouseController {
         return ResponseBuilder.success("Warehouse deleted successfully", null);
     }
 
+    @PostMapping("/allocate")
+    BaseUIResponse<StockAllocationResponse> allocateStock(
+            @RequestParam Long productId,
+            @RequestParam int quantity){
+                return ResponseBuilder.success("Allocate Stock result", warehouseService.allocateStock(productId, quantity));
+            }
 }

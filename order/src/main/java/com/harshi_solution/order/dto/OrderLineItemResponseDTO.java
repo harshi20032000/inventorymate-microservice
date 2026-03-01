@@ -11,6 +11,14 @@ public class OrderLineItemResponseDTO {
     private BigDecimal rate;
     private Map<Long, Integer> warehouseQuantities;
 
+    public Map<Long, Integer> getWarehouseQuantities() {
+        return warehouseQuantities;
+    }
+
+    public void setWarehouseQuantities(Map<Long, Integer> warehouseQuantities) {
+        this.warehouseQuantities = warehouseQuantities;
+    }
+
     public Long getId() {
         return id;
     }
@@ -42,15 +50,5 @@ public class OrderLineItemResponseDTO {
     public void setRate(BigDecimal rate) {
         this.rate = rate;
     }
-
-    public Map<Long, Integer> getWarehouseQuantities() {
-        return warehouseQuantities;
-    }
-
-    public void setWarehouseQuantities(Map<Long, Integer> warehouseQuantities) {
-        this.warehouseQuantities = warehouseQuantities;
-    }
-
-    // getters & setters
 
 }

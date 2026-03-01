@@ -15,6 +15,7 @@ import com.harshi_solution.order.dto.AddPaymentRequest;
 import com.harshi_solution.order.dto.CreateOrderRequest;
 import com.harshi_solution.order.dto.OrderResponseDTO;
 import com.harshi_solution.order.dto.ProductResponseDTO;
+import com.harshi_solution.order.dto.StockAllocationResponse;
 import com.harshi_solution.order.entities.Order;
 import com.harshi_solution.order.entities.OrderLineItem;
 import com.harshi_solution.order.entities.OrderStatusHistory;
@@ -50,6 +51,7 @@ public class OrderServiceImpl implements OrderService {
         order.setTotalOrderQuantity(0);
         order.setTotalBillAmount(BigDecimal.ZERO);
         order.setRemainingBillAmount(BigDecimal.ZERO);
+        order.setCurrentStatus(OrderStatus.CREATED);
 
         // Initial Status
         OrderStatusHistory history = new OrderStatusHistory();
@@ -76,24 +78,29 @@ public class OrderServiceImpl implements OrderService {
         // Fetch Product via Feign (NOT repository)
         Long productId = request.getProductId();
         int quantity = request.getQuantity();
-        ProductResponseDTO product = productClient.getProductById(productId);
+        BigDecimal rate =request.getRate();
+        ProductResponseDTO product = productClient.getProductById(productId).getResponsePayload();
 
         if (product == null) {
             throw new RuntimeException("Product not found with id: " + productId);
         }
+        if(product.getBasePrice().compareTo(rate)>0){
+throw new RuntimeException("Product with id: " + productId+"has rate lower than purchase price.");
+        }
 
-        // Optional: Validate warehouse stock
-        // warehouseClient.checkStock(productId, quantity);
+        StockAllocationResponse allocation =
+        warehouseClient.allocateStock(productId, quantity).getResponsePayload();
+        if(!allocation.isSufficient()){
+            throw new RuntimeException("Items not in Stock!");
+        }
 
         // Create Line Item
         OrderLineItem lineItem = new OrderLineItem();
         lineItem.setOrder(order);
         lineItem.setProductId(productId);
         lineItem.setQuantity(quantity);
-
-        // Use product price instead of trusting request
-        BigDecimal rate = product.getBasePrice();
         lineItem.setRate(rate);
+        lineItem.setWarehouseQuantities(allocation.getWarehouseAllocations());
 
         // Attach to Order
         order.getOrderLineItems().add(lineItem);

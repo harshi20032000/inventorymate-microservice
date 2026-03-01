@@ -30,6 +30,7 @@ public class Order {
     private Long repId;
 
     private Long partyId;
+    
     private Long transportId;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)

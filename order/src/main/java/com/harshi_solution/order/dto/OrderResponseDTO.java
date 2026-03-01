@@ -20,6 +20,7 @@ public class OrderResponseDTO {
     private String currentStatus;
 
     private List<OrderLineItemResponseDTO> orderLineItems;
+    
     private List<OrderStatusHistoryResponseDTO> statusHistory;
 
     public Long getOrderId() {

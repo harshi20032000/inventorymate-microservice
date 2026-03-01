@@ -32,6 +32,7 @@ public class OrderLineItem {
     @Column(nullable = false)
     private BigDecimal rate;
 
+    // This will store the details about how many items need to be picked from which warehouse.
     @ElementCollection
     @CollectionTable(name = "order_line_item_warehouse_quantities", joinColumns = @JoinColumn(name = "order_line_item_id"))
     @MapKeyColumn(name = "warehouse_id")
