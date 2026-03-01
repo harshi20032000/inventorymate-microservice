@@ -15,6 +15,7 @@ import com.harshi_solution.order.dto.AddPaymentRequest;
 import com.harshi_solution.order.dto.CreateOrderRequest;
 import com.harshi_solution.order.dto.OrderResponseDTO;
 import com.harshi_solution.order.dto.ProductResponseDTO;
+import com.harshi_solution.order.dto.ReserveStockRequest;
 import com.harshi_solution.order.dto.StockAllocationResponse;
 import com.harshi_solution.order.entities.Order;
 import com.harshi_solution.order.entities.OrderLineItem;
@@ -78,19 +79,18 @@ public class OrderServiceImpl implements OrderService {
         // Fetch Product via Feign (NOT repository)
         Long productId = request.getProductId();
         int quantity = request.getQuantity();
-        BigDecimal rate =request.getRate();
+        BigDecimal rate = request.getRate();
         ProductResponseDTO product = productClient.getProductById(productId).getResponsePayload();
 
         if (product == null) {
             throw new RuntimeException("Product not found with id: " + productId);
         }
-        if(product.getBasePrice().compareTo(rate)>0){
-throw new RuntimeException("Product with id: " + productId+"has rate lower than purchase price.");
+        if (product.getBasePrice().compareTo(rate) > 0) {
+            throw new RuntimeException("Product with id: " + productId + "has rate lower than purchase price.");
         }
 
-        StockAllocationResponse allocation =
-        warehouseClient.allocateStock(productId, quantity).getResponsePayload();
-        if(!allocation.isSufficient()){
+        StockAllocationResponse allocation = warehouseClient.allocateStock(productId, quantity).getResponsePayload();
+        if (!allocation.isSufficient()) {
             throw new RuntimeException("Items not in Stock!");
         }
 
@@ -139,12 +139,12 @@ throw new RuntimeException("Product with id: " + productId+"has rate lower than 
         }
 
         // Reserve stock via Warehouse Service
-        // for (OrderLineItem item : order.getOrderLineItems()) {
-        // warehouseClient.reserveStock(
-        // item.getProductId(),
-        // item.getQuantity()
-        // );
-        // }
+        // Later use reserveStockBatch Function send entire order aloocation in one go.
+        for (OrderLineItem item : order.getOrderLineItems()) {
+
+            warehouseClient.reserveStock(new ReserveStockRequest(item.getProductId(),
+                    item.getWarehouseQuantities()));
+        }
 
         // Update current status
         order.setCurrentStatus(OrderStatus.CONFIRMED);

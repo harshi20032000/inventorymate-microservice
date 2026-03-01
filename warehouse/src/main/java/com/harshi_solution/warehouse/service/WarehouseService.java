@@ -3,27 +3,30 @@ package com.harshi_solution.warehouse.service;
 import java.util.List;
 import java.util.Map;
 
+import com.harshi_solution.warehouse.dto.ReserveStockRequest;
 import com.harshi_solution.warehouse.dto.StockAllocationResponse;
 import com.harshi_solution.warehouse.dto.WarehouseRequestDTO;
 import com.harshi_solution.warehouse.dto.WarehouseResponseDTO;
 
 public interface WarehouseService {
 
-    WarehouseResponseDTO createWarehouse(WarehouseRequestDTO request);
+        WarehouseResponseDTO createWarehouse(WarehouseRequestDTO request);
 
-    List<WarehouseResponseDTO> getAllWarehouses();
+        List<WarehouseResponseDTO> getAllWarehouses();
 
-    WarehouseResponseDTO getWarehouseById(Long warehouseId);
+        WarehouseResponseDTO getWarehouseById(Long warehouseId);
 
-    WarehouseResponseDTO updateWarehouse(Long warehouseId,
-            WarehouseRequestDTO request);
+        WarehouseResponseDTO updateWarehouse(Long warehouseId,
+                        WarehouseRequestDTO request);
 
-    WarehouseResponseDTO updateProductQuantities(
-            Long warehouseId,
-            Map<Long, Integer> productQuantities);
+        WarehouseResponseDTO updateProductQuantities(
+                        Long warehouseId,
+                        Map<Long, Integer> productQuantities);
 
-    void deleteWarehouse(Long warehouseId);
+        void deleteWarehouse(Long warehouseId);
 
-    StockAllocationResponse allocateStock(Long productId, int quantity);
+        StockAllocationResponse allocateStock(Long productId, int quantity);
+
+        void reserveStock(ReserveStockRequest request);
 
 }

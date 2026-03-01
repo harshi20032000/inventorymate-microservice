@@ -1,0 +1,151 @@
+{
+  "info": {
+    "_postman_id": "e24175a1-559d-4446-81e1-1914a2d9c192",
+    "name": "Order",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "19898680"
+  },
+  "item": [
+    {
+      "name": "create order",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"repId\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5001/api/v1/orders",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5001",
+          "path": [
+            "api",
+            "v1",
+            "orders"
+          ]
+        },
+        "description": "Generated from cURL: curl --location 'http://localhost:8080/api/v1/orders' \\\r\n--header 'Content-Type: application/json' \\\r\n--data '{\r\n    \"partyId\": 1,\r\n    \"remarks\": \"Urgent delivery\"\r\n}'"
+      },
+      "response": []
+    },
+    {
+      "name": "add line items",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"productId\": 1,\r\n    \"quantity\": 10,\r\n    \"rate\": 1500.00\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5001/api/v1/orders/1/line-items",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5001",
+          "path": [
+            "api",
+            "v1",
+            "orders",
+            "1",
+            "line-items"
+          ]
+        },
+        "description": "Generated from cURL: curl --location 'http://localhost:8080/api/v1/orders/1/line-items' \\\r\n--header 'Content-Type: application/json' \\\r\n--data '{\r\n    \"productId\": 1,\r\n    \"quantity\": 10,\r\n    \"rate\": 150.00\r\n}'"
+      },
+      "response": []
+    },
+    {
+      "name": "confirm order",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"productId\": 1,\r\n    \"quantity\": 10,\r\n    \"rate\": 1500.00\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5001/api/v1/orders/6/confirm",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5001",
+          "path": [
+            "api",
+            "v1",
+            "orders",
+            "6",
+            "confirm"
+          ]
+        },
+        "description": "Generated from cURL: curl --location 'http://localhost:8080/api/v1/orders/1/line-items' \\\r\n--header 'Content-Type: application/json' \\\r\n--data '{\r\n    \"productId\": 1,\r\n    \"quantity\": 10,\r\n    \"rate\": 150.00\r\n}'"
+      },
+      "response": []
+    },
+    {
+      "name": "get by id",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "get all orders",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5001/api/v1/orders",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5001",
+          "path": [
+            "api",
+            "v1",
+            "orders"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

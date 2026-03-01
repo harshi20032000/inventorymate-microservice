@@ -7,12 +7,15 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.harshi_solution.warehouse.dto.ReserveStockRequest;
 import com.harshi_solution.warehouse.dto.StockAllocationResponse;
 import com.harshi_solution.warehouse.dto.WarehouseRequestDTO;
 import com.harshi_solution.warehouse.dto.WarehouseResponseDTO;
 import com.harshi_solution.warehouse.entities.Warehouse;
 import com.harshi_solution.warehouse.exception.InsufficientStockException;
 import com.harshi_solution.warehouse.repo.WarehouseRepo;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 @Transactional
@@ -139,5 +142,35 @@ public class WarehouseServiceImpl implements WarehouseService {
                 quantity,
                 totalAvailable,
                 allocation);
+    }
+
+    @Override
+    @Transactional
+    public void reserveStock(ReserveStockRequest request) {
+
+        Long productId = request.getProductId();
+        Map<Long, Integer> allocation = request.getWarehouseQuantities();
+
+        for (Map.Entry<Long, Integer> entry : allocation.entrySet()) {
+
+            Long warehouseId = entry.getKey();
+            Integer quantityToDeduct = entry.getValue();
+
+            Warehouse warehouse = warehouseRepository.findById(warehouseId)
+                    .orElseThrow(() -> new EntityNotFoundException("Warehouse not found with id - " + warehouseId));
+
+            Integer available = warehouse.getProductQuantities()
+                    .getOrDefault(productId, 0);
+
+            if (available < quantityToDeduct) {
+                throw new InsufficientStockException(
+                        "Stock changed. Available: " + available);
+            }
+
+            warehouse.getProductQuantities()
+                    .put(productId, available - quantityToDeduct);
+
+            warehouseRepository.save(warehouse);
+        }
     }
 }

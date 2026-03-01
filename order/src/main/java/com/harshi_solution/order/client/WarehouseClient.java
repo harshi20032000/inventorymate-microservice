@@ -4,9 +4,11 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.harshi_solution.order.dto.BaseUIResponse;
+import com.harshi_solution.order.dto.ReserveStockRequest;
 import com.harshi_solution.order.dto.StockAllocationResponse;
 import com.harshi_solution.order.dto.WarehouseResponseDTO;
 
@@ -20,4 +22,8 @@ public interface WarehouseClient {
     BaseUIResponse<StockAllocationResponse> allocateStock(
             @RequestParam Long productId,
             @RequestParam int quantity);
+
+   @PostMapping("/api/v1/warehouses/reserve")
+BaseUIResponse<Void> reserveStock(
+        @RequestBody ReserveStockRequest request);
 }
