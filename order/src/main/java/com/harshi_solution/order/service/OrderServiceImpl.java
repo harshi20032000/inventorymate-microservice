@@ -8,12 +8,15 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.harshi_solution.order.client.PaymentClient;
 import com.harshi_solution.order.client.ProductClient;
 import com.harshi_solution.order.client.WarehouseClient;
 import com.harshi_solution.order.dto.AddLineItemRequest;
-import com.harshi_solution.order.dto.AddPaymentRequest;
+import com.harshi_solution.order.dto.CreatePaymentRequest;
+import com.harshi_solution.order.dto.BaseUIResponse;
 import com.harshi_solution.order.dto.CreateOrderRequest;
 import com.harshi_solution.order.dto.OrderResponseDTO;
+import com.harshi_solution.order.dto.PaymentResponseDTO;
 import com.harshi_solution.order.dto.ProductResponseDTO;
 import com.harshi_solution.order.dto.ReserveStockRequest;
 import com.harshi_solution.order.dto.StockAllocationResponse;
@@ -32,13 +35,15 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
     private final ProductClient productClient;
     private final WarehouseClient warehouseClient;
+    private final PaymentClient paymentClient;
 
     public OrderServiceImpl(OrderRepository orderRepository, ProductClient productClient,
-            WarehouseClient warehouseClient,
+            WarehouseClient warehouseClient,PaymentClient paymentClient,
             OrderMapper orderMapper) {
         this.orderRepository = orderRepository;
         this.productClient = productClient;
         this.warehouseClient = warehouseClient;
+        this.paymentClient=paymentClient;
         this.orderMapper = orderMapper;
     }
 
@@ -163,66 +168,64 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toDto(savedOrder);
     }
 
-    @Override
-    public OrderResponseDTO addPayment(Long orderId, AddPaymentRequest request) {
+   @Override
+public OrderResponseDTO addPayment(Long orderId, CreatePaymentRequest request) {
 
-        // Fetch order
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found with id: " + orderId));
+    Order order = orderRepository.findById(orderId)
+            .orElseThrow(() -> new RuntimeException("Order not found with id: " + orderId));
 
-        // Validate status
-        if (order.getCurrentStatus() != OrderStatus.CONFIRMED &&
-                order.getCurrentStatus() != OrderStatus.PARTIALLY_PAID) {
-            throw new RuntimeException("Payment not allowed for current order status");
-        }
-
-        BigDecimal paymentAmount = request.getAmount();
-
-        if (paymentAmount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new RuntimeException("Payment amount must be greater than zero");
-        }
-
-        if (paymentAmount.compareTo(order.getRemainingBillAmount()) > 0) {
-            throw new RuntimeException("Payment exceeds remaining bill amount");
-        }
-
-        // Create Payment entity
-        // Payment payment = new Payment();
-        // payment.setOrder(order);
-        // payment.setAmount(paymentAmount);
-        // payment.setPaymentMethod(request.getPaymentMethod());
-        // payment.setPaymentTimestamp(LocalDateTime.now());
-
-        // order.getPayments().add(payment);
-
-        // Update remaining amount
-        BigDecimal newRemaining = order.getRemainingBillAmount().subtract(paymentAmount);
-        order.setRemainingBillAmount(newRemaining);
-
-        // Update status
-        OrderStatus newStatus;
-
-        if (newRemaining.compareTo(BigDecimal.ZERO) == 0) {
-            newStatus = OrderStatus.FULLY_PAID;
-        } else {
-            newStatus = OrderStatus.PARTIALLY_PAID;
-        }
-
-        order.setCurrentStatus(newStatus);
-
-        // Add status history
-        OrderStatusHistory history = new OrderStatusHistory();
-        history.setOrder(order);
-        history.setOrderStatus(newStatus);
-        history.setUpdateTimestamp(LocalDateTime.now());
-
-        order.getStatusHistory().add(history);
-
-        // Save
-        Order savedOrder = orderRepository.save(order);
-
-        return orderMapper.toDto(savedOrder);
+    if (order.getCurrentStatus() != OrderStatus.CONFIRMED &&
+            order.getCurrentStatus() != OrderStatus.PARTIALLY_PAID) {
+        throw new RuntimeException("Payment not allowed for current order status");
     }
+
+    BigDecimal paymentAmount = request.getPayAmount();
+
+    if (paymentAmount.compareTo(BigDecimal.ZERO) <= 0) {
+        throw new RuntimeException("Payment amount must be greater than zero");
+    }
+
+    if (paymentAmount.compareTo(order.getRemainingBillAmount()) > 0) {
+        throw new RuntimeException("Payment exceeds remaining bill amount");
+    }
+
+    // 🔹 STEP 1: Call Payment Microservice FIRST
+    CreatePaymentRequest paymentRequest = new CreatePaymentRequest();
+    paymentRequest.setOrderId(orderId);
+    paymentRequest.setPayAmount(paymentAmount);
+    paymentRequest.setPayMode(request.getPayMode());
+    paymentRequest.setPayType(request.getPayType());
+
+    BaseUIResponse<PaymentResponseDTO> paymentResponse =
+            paymentClient.createPayment(paymentRequest);
+
+    if (paymentResponse == null || paymentResponse.getResponsePayload() == null) {
+        throw new RuntimeException("Payment service failed");
+    }
+
+    // 🔹 STEP 2: Only after success, update order
+
+    BigDecimal newRemaining = order.getRemainingBillAmount().subtract(paymentAmount);
+    order.setRemainingBillAmount(newRemaining);
+
+    OrderStatus newStatus =
+            newRemaining.compareTo(BigDecimal.ZERO) == 0
+                    ? OrderStatus.FULLY_PAID
+                    : OrderStatus.PARTIALLY_PAID;
+
+    order.setCurrentStatus(newStatus);
+
+    OrderStatusHistory history = new OrderStatusHistory();
+    history.setOrder(order);
+    history.setOrderStatus(newStatus);
+    history.setUpdateTimestamp(LocalDateTime.now());
+
+    order.getStatusHistory().add(history);
+
+    Order savedOrder = orderRepository.save(order);
+
+    return orderMapper.toDto(savedOrder);
+}
 
     @Override
     @Transactional(readOnly = true)

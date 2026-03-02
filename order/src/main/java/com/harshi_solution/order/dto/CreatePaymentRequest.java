@@ -1,11 +1,10 @@
-package com.harshi_solution.payment.dto;
+package com.harshi_solution.order.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
-import com.harshi_solution.payment.enums.PayMode;
-import com.harshi_solution.payment.enums.PayType;
+import com.harshi_solution.order.enums.PayMode;
+import com.harshi_solution.order.enums.PayType;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -22,16 +21,6 @@ public class CreatePaymentRequest {
     private PayType payType;
 
     private LocalDate paymentConfirmationDate;
-
-    private List<DocumentRequestDTO> documents;
-
-    public List<DocumentRequestDTO> getDocuments() {
-        return documents;
-    }
-
-    public void setDocuments(List<DocumentRequestDTO> documents) {
-        this.documents = documents;
-    }
 
     public Long getOrderId() {
         return orderId;

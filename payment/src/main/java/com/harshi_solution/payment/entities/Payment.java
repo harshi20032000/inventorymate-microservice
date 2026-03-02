@@ -1,14 +1,21 @@
 package com.harshi_solution.payment.entities;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.harshi_solution.payment.enums.PayMode;
+import com.harshi_solution.payment.enums.PayType;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,19 +26,22 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long payId;
 
-    private LocalDate payDate;
+    private LocalDate paymentConfirmationDate;
 
-    private Double payAmount;
+    private LocalDate paymentUpdatedDate;
 
-    private String payMode; // CASH, UPI, BANK_TRANSFER
+    private BigDecimal payAmount;
 
-    private String payType; // ADVANCE, PARTIAL, FULL
+    @Enumerated(EnumType.STRING)
+    private PayMode payMode; // CASH, UPI, BANK_TRANSFER
+
+    @Enumerated(EnumType.STRING)
+    private PayType payType; // ADVANCE, PARTIAL, FULL
 
     private Long orderId; // Only ID reference
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "doc_id")
-    private Document document;
+    @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Document> documents = new ArrayList<>();
 
     public Long getPayId() {
         return payId;
@@ -41,35 +51,27 @@ public class Payment {
         this.payId = payId;
     }
 
-    public LocalDate getPayDate() {
-        return payDate;
-    }
-
-    public void setPayDate(LocalDate payDate) {
-        this.payDate = payDate;
-    }
-
-    public Double getPayAmount() {
+    public BigDecimal getPayAmount() {
         return payAmount;
     }
 
-    public void setPayAmount(Double payAmount) {
+    public void setPayAmount(BigDecimal payAmount) {
         this.payAmount = payAmount;
     }
 
-    public String getPayMode() {
+    public PayMode getPayMode() {
         return payMode;
     }
 
-    public void setPayMode(String payMode) {
+    public void setPayMode(PayMode payMode) {
         this.payMode = payMode;
     }
 
-    public String getPayType() {
+    public PayType getPayType() {
         return payType;
     }
 
-    public void setPayType(String payType) {
+    public void setPayType(PayType payType) {
         this.payType = payType;
     }
 
@@ -81,12 +83,27 @@ public class Payment {
         this.orderId = orderId;
     }
 
-    public Document getDocument() {
-        return document;
+    public List<Document> getDocuments() {
+        return documents;
     }
 
-    public void setDocument(Document document) {
-        this.document = document;
+    public void setDocuments(List<Document> documents) {
+        this.documents = documents;
     }
 
+    public LocalDate getPaymentConfirmationDate() {
+        return paymentConfirmationDate;
+    }
+
+    public void setPaymentConfirmationDate(LocalDate paymentConfirmationDate) {
+        this.paymentConfirmationDate = paymentConfirmationDate;
+    }
+
+    public LocalDate getPaymentUpdatedDate() {
+        return paymentUpdatedDate;
+    }
+
+    public void setPaymentUpdatedDate(LocalDate paymentUpdatedDate) {
+        this.paymentUpdatedDate = paymentUpdatedDate;
+    }
 }

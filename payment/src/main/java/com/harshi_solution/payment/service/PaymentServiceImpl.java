@@ -1,39 +1,51 @@
 package com.harshi_solution.payment.service;
 
+import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.harshi_solution.payment.dto.CreatePaymentRequest;
+import com.harshi_solution.payment.dto.DocumentResponseDTO;
 import com.harshi_solution.payment.dto.PaymentResponseDTO;
+import com.harshi_solution.payment.entities.Document;
 import com.harshi_solution.payment.entities.Payment;
 import com.harshi_solution.payment.mapper.PaymentMapper;
+import com.harshi_solution.payment.repo.DocumentRepository;
 import com.harshi_solution.payment.repo.PaymentRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 @Transactional
 public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository paymentRepository;
+    private final DocumentRepository documentRepository;
     private final PaymentMapper paymentMapper;
 
-    public PaymentServiceImpl(PaymentRepository paymentRepository, PaymentMapper paymentMapper) {
+    public PaymentServiceImpl(PaymentRepository paymentRepository, DocumentRepository documentRepository,
+            PaymentMapper paymentMapper) {
         this.paymentRepository = paymentRepository;
         this.paymentMapper = paymentMapper;
+        this.documentRepository = documentRepository;
     }
 
     @Override
+    @Transactional
     public PaymentResponseDTO createPayment(CreatePaymentRequest request) {
 
-        Payment payment = paymentMapper.toEntity(request);
+        Payment payment = paymentMapper.toPaymentEntity(request);
 
-        payment.setPayDate(LocalDate.now());
+        payment.setPaymentUpdatedDate(LocalDate.now());
 
         Payment saved = paymentRepository.save(payment);
 
-        return paymentMapper.toDTO(saved);
+        return paymentMapper.toPaymentDTO(saved);
     }
 
     @Override
@@ -43,7 +55,7 @@ public class PaymentServiceImpl implements PaymentService {
         Payment payment = paymentRepository.findById(payId)
                 .orElseThrow(() -> new RuntimeException("Payment not found"));
 
-        return paymentMapper.toDTO(payment);
+        return paymentMapper.toPaymentDTO(payment);
     }
 
     @Override
@@ -68,6 +80,56 @@ public class PaymentServiceImpl implements PaymentService {
                 .orElseThrow(() -> new RuntimeException("Payment not found"));
 
         paymentRepository.delete(payment);
+    }
+
+    @Transactional(readOnly = true)
+    public List<DocumentResponseDTO> getDocumentsByPaymentId(Long paymentId) {
+
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new EntityNotFoundException("Payment not found"));
+
+        return paymentMapper.toDocumentDTOList(payment.getDocuments());
+    }
+
+    @Transactional(readOnly = true)
+    public DocumentResponseDTO getDocumentById(Long docId) {
+
+        Document result = documentRepository.findById(docId)
+                .orElseThrow(() -> new EntityNotFoundException("Document not found"));
+        return paymentMapper.toDocumentDTO(result);
+    }
+
+    @Transactional
+    @Override
+    public DocumentResponseDTO addDocument(Long paymentId, MultipartFile file) throws IOException {
+
+        // Validate file
+        if (file == null || file.isEmpty()) {
+            throw new IllegalArgumentException("File cannot be empty");
+        }
+
+        if (file.getSize() > 3_000_000) { // 3MB limit example
+            throw new IllegalArgumentException("File size exceeds maximum limit 3mb");
+        }
+
+        // Fetch payment
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new EntityNotFoundException("Payment not found with id: " + paymentId));
+
+        // Create Document entity
+        Document document = new Document();
+        document.setName(file.getOriginalFilename());
+        document.setContentType(file.getContentType());
+        document.setSize(file.getSize());
+        document.setData(file.getBytes());
+        document.setDocumentUpdatedDate(LocalDateTime.now());
+        document.setPayment(payment);
+
+        // Save document
+        Document savedDocument = documentRepository.save(document);
+
+        // Map to DTO
+        return paymentMapper.toDocumentDTO(savedDocument);
     }
 
 }

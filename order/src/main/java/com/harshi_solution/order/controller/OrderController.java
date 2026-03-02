@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.harshi_solution.order.dto.AddLineItemRequest;
-import com.harshi_solution.order.dto.AddPaymentRequest;
+import com.harshi_solution.order.dto.CreatePaymentRequest;
 import com.harshi_solution.order.dto.BaseUIResponse;
 import com.harshi_solution.order.dto.CreateOrderRequest;
 import com.harshi_solution.order.dto.OrderResponseDTO;
@@ -57,7 +57,7 @@ public class OrderController {
     @PostMapping("/{orderId}/payments")
     public BaseUIResponse<OrderResponseDTO> addPayment(
             @PathVariable Long orderId,
-            @RequestBody AddPaymentRequest request) {
+            @RequestBody CreatePaymentRequest request) {
 
         OrderResponseDTO response = orderService.addPayment(orderId, request);
 

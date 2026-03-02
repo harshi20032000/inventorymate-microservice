@@ -1,8 +1,7 @@
-package com.harshi_solution.payment.dto;
+package com.harshi_solution.order.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 public class PaymentResponseDTO {
 
@@ -19,8 +18,6 @@ public class PaymentResponseDTO {
     private String payType;
 
     private Long orderId;
-
-    private List<DocumentRequestDTO> documents;
 
     public Long getPayId() {
         return payId;
@@ -68,14 +65,6 @@ public class PaymentResponseDTO {
 
     public void setPaymentConfirmationDate(LocalDate paymentConfirmationDate) {
         this.paymentConfirmationDate = paymentConfirmationDate;
-    }
-
-    public List<DocumentRequestDTO> getDocuments() {
-        return documents;
-    }
-
-    public void setDocuments(List<DocumentRequestDTO> documents) {
-        this.documents = documents;
     }
 
      public LocalDate getPaymentUpdatedDate() {
