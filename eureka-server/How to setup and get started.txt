@@ -1,0 +1,16 @@
+How to get started 
+setup eureka server
+
+check in dependency spring cloud starter netflix eureka server
+use also dependency management for managing cloud dependency versions
+put @EnableEurekaServer make sure its imported from org.springframework.cloud.netflix
+use default server.port=8761
+make sure
+in application.properties make sure register-with-eureka and fetch-registry is false.
+
+After Successfully starting :
+open on browser - http://localhost:8761/
+
+Note : First start eureka_server then all other eureka_client apps because as they start they will try to register to eureka_server.
+
+
