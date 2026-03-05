@@ -8,7 +8,7 @@ import com.harshi_solution.order.dto.CreatePaymentRequest;
 import com.harshi_solution.order.dto.BaseUIResponse;
 import com.harshi_solution.order.dto.PaymentResponseDTO;
 
-@FeignClient(name = "payments-client", url = "payments.service.url")
+@FeignClient(name = "payment-service")
 public interface PaymentClient {
 
     @PostMapping("/api/v1/payments")

@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
+import com.harshi_solution.order.util.OrderStatus;
+
 public class OrderResponseDTO {
 
     private Long orderId;
@@ -17,7 +19,7 @@ public class OrderResponseDTO {
     private BigDecimal totalBillAmount;
     private BigDecimal remainingBillAmount;
 
-    private String currentStatus;
+    private OrderStatus currentStatus;
 
     private List<OrderLineItemResponseDTO> orderLineItems;
     
@@ -87,11 +89,11 @@ public class OrderResponseDTO {
         this.remainingBillAmount = remainingBillAmount;
     }
 
-    public String getCurrentStatus() {
+    public OrderStatus getCurrentStatus() {
         return currentStatus;
     }
 
-    public void setCurrentStatus(String currentStatus) {
+    public void setCurrentStatus(OrderStatus currentStatus) {
         this.currentStatus = currentStatus;
     }
 
@@ -110,7 +112,5 @@ public class OrderResponseDTO {
     public void setStatusHistory(List<OrderStatusHistoryResponseDTO> statusHistory) {
         this.statusHistory = statusHistory;
     }
-
-    // getters & setters
 
 }

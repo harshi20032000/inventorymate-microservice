@@ -195,6 +195,7 @@ public OrderResponseDTO addPayment(Long orderId, CreatePaymentRequest request) {
     paymentRequest.setPayAmount(paymentAmount);
     paymentRequest.setPayMode(request.getPayMode());
     paymentRequest.setPayType(request.getPayType());
+    paymentRequest.setPaymentConfirmationDate(request.getPaymentConfirmationDate());
 
     BaseUIResponse<PaymentResponseDTO> paymentResponse =
             paymentClient.createPayment(paymentRequest);

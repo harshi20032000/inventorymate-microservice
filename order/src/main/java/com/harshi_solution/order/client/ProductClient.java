@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.harshi_solution.order.dto.BaseUIResponse;
 import com.harshi_solution.order.dto.ProductResponseDTO;
 
-@FeignClient(name = "product-service", url = "${product.service.url}")
+@FeignClient(name = "product-service")
 public interface ProductClient {
 
     @GetMapping("/api/v1/products/{id}")

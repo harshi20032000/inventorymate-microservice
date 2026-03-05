@@ -3,6 +3,9 @@ package com.harshi_solution.order.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.harshi_solution.order.enums.PayMode;
+import com.harshi_solution.order.enums.PayType;
+
 public class PaymentResponseDTO {
 
     private Long payId;
@@ -13,9 +16,9 @@ public class PaymentResponseDTO {
 
     private BigDecimal payAmount;
 
-    private String payMode;
+    private PayMode payMode;
 
-    private String payType;
+    private PayType payType;
 
     private Long orderId;
 
@@ -35,19 +38,19 @@ public class PaymentResponseDTO {
         this.payAmount = payAmount;
     }
 
-    public String getPayMode() {
+    public PayMode getPayMode() {
         return payMode;
     }
 
-    public void setPayMode(String payMode) {
+    public void setPayMode(PayMode payMode) {
         this.payMode = payMode;
     }
 
-    public String getPayType() {
+    public PayType getPayType() {
         return payType;
     }
 
-    public void setPayType(String payType) {
+    public void setPayType(PayType payType) {
         this.payType = payType;
     }
 

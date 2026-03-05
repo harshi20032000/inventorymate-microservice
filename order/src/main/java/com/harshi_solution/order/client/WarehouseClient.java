@@ -12,7 +12,7 @@ import com.harshi_solution.order.dto.ReserveStockRequest;
 import com.harshi_solution.order.dto.StockAllocationResponse;
 import com.harshi_solution.order.dto.WarehouseResponseDTO;
 
-@FeignClient(name = "warehouse-service", url = "${warehouse.service.url}")
+@FeignClient(name = "warehouse-service")
 public interface WarehouseClient {
 
     @GetMapping("/api/v1/warehouses/{id}")
