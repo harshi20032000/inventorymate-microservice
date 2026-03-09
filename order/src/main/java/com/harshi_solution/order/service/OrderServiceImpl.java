@@ -12,9 +12,9 @@ import com.harshi_solution.order.client.PaymentClient;
 import com.harshi_solution.order.client.ProductClient;
 import com.harshi_solution.order.client.WarehouseClient;
 import com.harshi_solution.order.dto.AddLineItemRequest;
-import com.harshi_solution.order.dto.CreatePaymentRequest;
 import com.harshi_solution.order.dto.BaseUIResponse;
 import com.harshi_solution.order.dto.CreateOrderRequest;
+import com.harshi_solution.order.dto.CreatePaymentRequest;
 import com.harshi_solution.order.dto.OrderResponseDTO;
 import com.harshi_solution.order.dto.PaymentResponseDTO;
 import com.harshi_solution.order.dto.ProductResponseDTO;
@@ -23,6 +23,7 @@ import com.harshi_solution.order.dto.StockAllocationResponse;
 import com.harshi_solution.order.entities.Order;
 import com.harshi_solution.order.entities.OrderLineItem;
 import com.harshi_solution.order.entities.OrderStatusHistory;
+import com.harshi_solution.order.exception.customExceptionHandler.OrderNotFoundException;
 import com.harshi_solution.order.mapper.OrderMapper;
 import com.harshi_solution.order.repo.OrderRepository;
 import com.harshi_solution.order.util.OrderStatus;
@@ -233,7 +234,7 @@ public OrderResponseDTO addPayment(Long orderId, CreatePaymentRequest request) {
     public OrderResponseDTO getOrderById(Long orderId) {
 
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found with id: " + orderId));
+                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + orderId));
 
         return orderMapper.toDto(order);
     }
