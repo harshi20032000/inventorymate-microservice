@@ -16,6 +16,7 @@ import com.harshi_solution.transport.dto.TransportResponseDTO;
 import com.harshi_solution.transport.dto.VehicleResponseDTO;
 import com.harshi_solution.transport.entities.Transport;
 import com.harshi_solution.transport.entities.TransportAndBuiltNumber;
+import com.harshi_solution.transport.exception.TransportNotFoundException;
 import com.harshi_solution.transport.repo.TransportRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -38,8 +39,7 @@ public class TransportServiceImpl implements TransportService {
 	@Transactional(readOnly = true)
 	public TransportResponseDTO getTransportById(Long transportId) {
 
-		Transport transport = transportRepository.findById(transportId)
-				.orElseThrow(() -> new EntityNotFoundException("Transport not found with id: " + transportId));
+		Transport transport = getTransportOrThrow(transportId);
 
 		return mapToResponseDTO(transport);
 	}
@@ -80,8 +80,7 @@ public class TransportServiceImpl implements TransportService {
 	public TransportResponseDTO updateTransport(Long id,
 			TransportRequestDTO request) {
 
-		Transport existingTransport = transportRepository.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException("Transport not found with id: " + id));
+		Transport existingTransport = getTransportOrThrow(id);
 
 		// Update simple fields
 		if (request.getTransportName() != null) {
@@ -126,9 +125,7 @@ public class TransportServiceImpl implements TransportService {
 	@Transactional
 	public void deleteTransportById(Long transportId) {
 
-		Transport transport = transportRepository.findById(transportId)
-				.orElseThrow(() -> new EntityNotFoundException(
-						"Transport not found with id: " + transportId));
+		Transport transport = getTransportOrThrow(transportId);
 
 		transportRepository.delete(transport);
 	}
@@ -158,6 +155,12 @@ public class TransportServiceImpl implements TransportService {
 		dto.setUpdatedAt(transport.getUpdatedAt());
 
 		return dto;
+	}
+
+	private Transport getTransportOrThrow(long transportId) {
+		return transportRepository.findById(transportId)
+				.orElseThrow(
+						() -> new TransportNotFoundException("Transport not found with Transport id: " + transportId));
 	}
 
 }

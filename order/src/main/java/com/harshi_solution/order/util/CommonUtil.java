@@ -30,7 +30,4 @@ public class CommonUtil {
         return UUID.randomUUID().toString();
     }
 
-    public static String extractErrorCode(String errorKey) {
-        return errorKey.substring(errorKey.lastIndexOf("_") + 1);
-    }
 }

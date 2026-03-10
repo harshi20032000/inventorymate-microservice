@@ -1,6 +1,6 @@
-package com.harshi_solution.party.util;
+package com.harshi_solution.transport.util;
 
-import com.harshi_solution.party.dto.BaseUIResponse;
+import com.harshi_solution.transport.dto.BaseUIResponse;
 
 public class ResponseBuilder {
 

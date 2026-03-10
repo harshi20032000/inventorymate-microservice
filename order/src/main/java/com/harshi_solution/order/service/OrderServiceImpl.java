@@ -39,12 +39,12 @@ public class OrderServiceImpl implements OrderService {
     private final PaymentClient paymentClient;
 
     public OrderServiceImpl(OrderRepository orderRepository, ProductClient productClient,
-            WarehouseClient warehouseClient,PaymentClient paymentClient,
+            WarehouseClient warehouseClient, PaymentClient paymentClient,
             OrderMapper orderMapper) {
         this.orderRepository = orderRepository;
         this.productClient = productClient;
         this.warehouseClient = warehouseClient;
-        this.paymentClient=paymentClient;
+        this.paymentClient = paymentClient;
         this.orderMapper = orderMapper;
     }
 
@@ -79,8 +79,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponseDTO addLineItem(Long orderId, AddLineItemRequest request) {
 
         // Fetch Order
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found with id: " + orderId));
+        Order order = getOrderOrThrow(orderId);
 
         // Fetch Product via Feign (NOT repository)
         Long productId = request.getProductId();
@@ -131,8 +130,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponseDTO confirmOrder(Long orderId) {
 
         // Fetch order
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found with id: " + orderId));
+        Order order = getOrderOrThrow(orderId);
 
         // Validate current status
         if (order.getCurrentStatus() != OrderStatus.CREATED) {
@@ -169,72 +167,68 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toDto(savedOrder);
     }
 
-   @Override
-public OrderResponseDTO addPayment(Long orderId, CreatePaymentRequest request) {
+    @Override
+    public OrderResponseDTO addPayment(Long orderId, CreatePaymentRequest request) {
 
-    Order order = orderRepository.findById(orderId)
-            .orElseThrow(() -> new RuntimeException("Order not found with id: " + orderId));
+        Order order = getOrderOrThrow(orderId);
 
-    if (order.getCurrentStatus() != OrderStatus.CONFIRMED &&
-            order.getCurrentStatus() != OrderStatus.PARTIALLY_PAID) {
-        throw new RuntimeException("Payment not allowed for current order status");
+        if (order.getCurrentStatus() != OrderStatus.CONFIRMED &&
+                order.getCurrentStatus() != OrderStatus.PARTIALLY_PAID) {
+            throw new RuntimeException("Payment not allowed for current order status");
+        }
+
+        BigDecimal paymentAmount = request.getPayAmount();
+
+        if (paymentAmount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new RuntimeException("Payment amount must be greater than zero");
+        }
+
+        if (paymentAmount.compareTo(order.getRemainingBillAmount()) > 0) {
+            throw new RuntimeException("Payment exceeds remaining bill amount");
+        }
+
+        // 🔹 STEP 1: Call Payment Microservice FIRST
+        CreatePaymentRequest paymentRequest = new CreatePaymentRequest();
+        paymentRequest.setOrderId(orderId);
+        paymentRequest.setPayAmount(paymentAmount);
+        paymentRequest.setPayMode(request.getPayMode());
+        paymentRequest.setPayType(request.getPayType());
+        paymentRequest.setPaymentConfirmationDate(request.getPaymentConfirmationDate());
+
+        BaseUIResponse<PaymentResponseDTO> paymentResponse = paymentClient.createPayment(paymentRequest);
+
+        if (paymentResponse == null || paymentResponse.getResponsePayload() == null) {
+            throw new RuntimeException("Payment service failed");
+        }
+
+        // 🔹 STEP 2: Only after success, update order
+
+        BigDecimal newRemaining = order.getRemainingBillAmount().subtract(paymentAmount);
+        order.setRemainingBillAmount(newRemaining);
+
+        OrderStatus newStatus = newRemaining.compareTo(BigDecimal.ZERO) == 0
+                ? OrderStatus.FULLY_PAID
+                : OrderStatus.PARTIALLY_PAID;
+
+        order.setCurrentStatus(newStatus);
+
+        OrderStatusHistory history = new OrderStatusHistory();
+        history.setOrder(order);
+        history.setOrderStatus(newStatus);
+        history.setUpdateTimestamp(LocalDateTime.now());
+
+        order.getStatusHistory().add(history);
+
+        Order savedOrder = orderRepository.save(order);
+
+        return orderMapper.toDto(savedOrder);
     }
-
-    BigDecimal paymentAmount = request.getPayAmount();
-
-    if (paymentAmount.compareTo(BigDecimal.ZERO) <= 0) {
-        throw new RuntimeException("Payment amount must be greater than zero");
-    }
-
-    if (paymentAmount.compareTo(order.getRemainingBillAmount()) > 0) {
-        throw new RuntimeException("Payment exceeds remaining bill amount");
-    }
-
-    // 🔹 STEP 1: Call Payment Microservice FIRST
-    CreatePaymentRequest paymentRequest = new CreatePaymentRequest();
-    paymentRequest.setOrderId(orderId);
-    paymentRequest.setPayAmount(paymentAmount);
-    paymentRequest.setPayMode(request.getPayMode());
-    paymentRequest.setPayType(request.getPayType());
-    paymentRequest.setPaymentConfirmationDate(request.getPaymentConfirmationDate());
-
-    BaseUIResponse<PaymentResponseDTO> paymentResponse =
-            paymentClient.createPayment(paymentRequest);
-
-    if (paymentResponse == null || paymentResponse.getResponsePayload() == null) {
-        throw new RuntimeException("Payment service failed");
-    }
-
-    // 🔹 STEP 2: Only after success, update order
-
-    BigDecimal newRemaining = order.getRemainingBillAmount().subtract(paymentAmount);
-    order.setRemainingBillAmount(newRemaining);
-
-    OrderStatus newStatus =
-            newRemaining.compareTo(BigDecimal.ZERO) == 0
-                    ? OrderStatus.FULLY_PAID
-                    : OrderStatus.PARTIALLY_PAID;
-
-    order.setCurrentStatus(newStatus);
-
-    OrderStatusHistory history = new OrderStatusHistory();
-    history.setOrder(order);
-    history.setOrderStatus(newStatus);
-    history.setUpdateTimestamp(LocalDateTime.now());
-
-    order.getStatusHistory().add(history);
-
-    Order savedOrder = orderRepository.save(order);
-
-    return orderMapper.toDto(savedOrder);
-}
 
     @Override
     @Transactional(readOnly = true)
     public OrderResponseDTO getOrderById(Long orderId) {
 
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + orderId));
+        Order order = getOrderOrThrow(orderId);
 
         return orderMapper.toDto(order);
     }
@@ -248,5 +242,10 @@ public OrderResponseDTO addPayment(Long orderId, CreatePaymentRequest request) {
         return orders.stream()
                 .map(orderMapper::toDto)
                 .toList();
+    }
+
+    private Order getOrderOrThrow(long orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderNotFoundException("Order not found with order id: " + orderId));
     }
 }

@@ -14,17 +14,17 @@ public class ResponseBuilder {
         return response;
     }
 
-    public static <T> BaseUIResponse<T> error(
+    public static <T> BaseUIResponse<T> handleException(
             String code,
             String message,
             String extendedMessage) {
-
         BaseUIResponse<T> response = new BaseUIResponse<>();
         response.setCode(code);
         response.setMessage(message);
         response.setExtendedMessage(extendedMessage);
-        response.setStatus("FAILED");
+        response.setStatus("Exception Occured");
         response.setHasError(true);
+        response.setResponsePayload(null);
         return response;
     }
 }

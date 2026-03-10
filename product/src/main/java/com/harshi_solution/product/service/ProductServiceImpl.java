@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.harshi_solution.product.dto.ProductRequestDTO;
 import com.harshi_solution.product.dto.ProductResponseDTO;
 import com.harshi_solution.product.entities.Product;
+import com.harshi_solution.product.exception.ProductNotFoundException;
 import com.harshi_solution.product.repo.ProductRepository;
 
 @Service
@@ -79,9 +80,9 @@ public class ProductServiceImpl implements ProductService {
     // 🔹 Private helper methods
     // -------------------------------
 
-    private Product findProductOrThrow(Long productId) {
+    private Product findProductOrThrow(long productId) {
         return productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + productId));
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with product id: " + productId));
     }
 
     private ProductResponseDTO mapToResponse(Product product) {

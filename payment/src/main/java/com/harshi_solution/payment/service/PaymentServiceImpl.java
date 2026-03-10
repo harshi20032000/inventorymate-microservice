@@ -14,6 +14,7 @@ import com.harshi_solution.payment.dto.DocumentResponseDTO;
 import com.harshi_solution.payment.dto.PaymentResponseDTO;
 import com.harshi_solution.payment.entities.Document;
 import com.harshi_solution.payment.entities.Payment;
+import com.harshi_solution.payment.exception.PaymentNotFoundException;
 import com.harshi_solution.payment.mapper.PaymentMapper;
 import com.harshi_solution.payment.repo.DocumentRepository;
 import com.harshi_solution.payment.repo.PaymentRepository;
@@ -52,8 +53,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Transactional(readOnly = true)
     public PaymentResponseDTO getPaymentById(Long payId) {
 
-        Payment payment = paymentRepository.findById(payId)
-                .orElseThrow(() -> new RuntimeException("Payment not found"));
+        Payment payment = getPaymentOrThrow(payId);
 
         return paymentMapper.toPaymentDTO(payment);
     }
@@ -76,17 +76,15 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public void deletePayment(Long payId) {
 
-        Payment payment = paymentRepository.findById(payId)
-                .orElseThrow(() -> new RuntimeException("Payment not found"));
+        Payment payment = getPaymentOrThrow(payId);
 
         paymentRepository.delete(payment);
     }
 
     @Transactional(readOnly = true)
-    public List<DocumentResponseDTO> getDocumentsByPaymentId(Long paymentId) {
+    public List<DocumentResponseDTO> getDocumentsByPaymentId(Long payId) {
 
-        Payment payment = paymentRepository.findById(paymentId)
-                .orElseThrow(() -> new EntityNotFoundException("Payment not found"));
+        Payment payment = getPaymentOrThrow(payId);
 
         return paymentMapper.toDocumentDTOList(payment.getDocuments());
     }
@@ -101,7 +99,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Transactional
     @Override
-    public DocumentResponseDTO addDocument(Long paymentId, MultipartFile file) throws IOException {
+    public DocumentResponseDTO addDocument(Long payId, MultipartFile file) throws IOException {
 
         // Validate file
         if (file == null || file.isEmpty()) {
@@ -113,8 +111,7 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         // Fetch payment
-        Payment payment = paymentRepository.findById(paymentId)
-                .orElseThrow(() -> new EntityNotFoundException("Payment not found with id: " + paymentId));
+        Payment payment = getPaymentOrThrow(payId);
 
         // Create Document entity
         Document document = new Document();
@@ -130,6 +127,11 @@ public class PaymentServiceImpl implements PaymentService {
 
         // Map to DTO
         return paymentMapper.toDocumentDTO(savedDocument);
+    }
+
+    private Payment getPaymentOrThrow(long payId) {
+        return paymentRepository.findById(payId)
+                .orElseThrow(() -> new PaymentNotFoundException("Payment not found with pay id : " + payId));
     }
 
 }

@@ -2,10 +2,6 @@ package com.harshi_solution.warehouse.dto;
 
 import java.io.Serializable;
 
-import com.harshi_solution.warehouse.util.CommonUtil;
-import com.harshi_solution.warehouse.util.Constants;
-import com.harshi_solution.warehouse.util.ErrorMessageEnum;
-
 public class BaseUIResponse<T> implements Serializable {
 	private static final long serialVersionUID = 7980140018L;
 	private String code;
@@ -20,8 +16,6 @@ public class BaseUIResponse<T> implements Serializable {
 	}
 
 	public void setResponsePayload(T responsePayload) {
-		this.setCode(Constants.STATUS_SUCCESS_CODE);
-		this.setStatus(Constants.STATUS_SUCCESS);
 		this.responsePayload = responsePayload;
 	}
 
@@ -63,18 +57,6 @@ public class BaseUIResponse<T> implements Serializable {
 
 	public void setHasError(boolean hasError) {
 		this.hasError = hasError;
-	}
-
-	public void setEmptyResponsePayload() {
-		this.setCode(Constants.STATUS_SUCCESS_CODE);
-		this.setStatus(Constants.STATUS_SUCCESS);
-	}
-
-	public void setError(ErrorMessageEnum error) {
-		String errorCode = CommonUtil.extractErrorCode(error.toString());
-		this.setCode(errorCode);
-		this.setMessage(error.getCustomMessage());
-		this.setHasError(true);
 	}
 
 	@Override

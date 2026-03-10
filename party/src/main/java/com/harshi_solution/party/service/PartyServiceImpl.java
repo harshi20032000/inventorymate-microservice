@@ -8,8 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.harshi_solution.party.dto.PartyRequestDTO;
 import com.harshi_solution.party.dto.PartyResponseDTO;
 import com.harshi_solution.party.entities.Party;
+import com.harshi_solution.party.exception.PartyNotFoundException;
 import com.harshi_solution.party.mapper.PartyMapper;
 import com.harshi_solution.party.repo.PartyRepository;
+
 @Service
 @Transactional
 public class PartyServiceImpl implements PartyService {
@@ -17,9 +19,9 @@ public class PartyServiceImpl implements PartyService {
     private final PartyRepository partyRepository;
     private final PartyMapper partyMapper;
 
-    public PartyServiceImpl(PartyRepository partyRepository, PartyMapper partyMapper){
-        this.partyRepository=partyRepository;
-        this.partyMapper=partyMapper;
+    public PartyServiceImpl(PartyRepository partyRepository, PartyMapper partyMapper) {
+        this.partyRepository = partyRepository;
+        this.partyMapper = partyMapper;
     }
 
     @Override
@@ -49,8 +51,7 @@ public class PartyServiceImpl implements PartyService {
     @Transactional(readOnly = true)
     public PartyResponseDTO getPartyById(Long partyId) {
 
-        Party party = partyRepository.findById(partyId)
-                .orElseThrow(() -> new RuntimeException("Party not found"));
+        Party party = getPartyOrThrowException(partyId);
 
         return partyMapper.toDTO(party);
     }
@@ -58,8 +59,7 @@ public class PartyServiceImpl implements PartyService {
     @Override
     public PartyResponseDTO updateParty(Long partyId, PartyRequestDTO request) {
 
-        Party existingParty = partyRepository.findById(partyId)
-                .orElseThrow(() -> new RuntimeException("Party not found"));
+        Party existingParty = getPartyOrThrowException(partyId);
 
         existingParty.setPartyName(request.getPartyName());
         existingParty.setPartyLocation(request.getPartyLocation());
@@ -73,9 +73,13 @@ public class PartyServiceImpl implements PartyService {
     @Override
     public void deleteParty(Long partyId) {
 
-        Party party = partyRepository.findById(partyId)
-                .orElseThrow(() -> new RuntimeException("Party not found"));
+        Party party = getPartyOrThrowException(partyId);
 
         partyRepository.delete(party);
+    }
+
+    private Party getPartyOrThrowException(long partyId) {
+        return partyRepository.findById(partyId)
+                .orElseThrow(() -> new PartyNotFoundException("Party not found with Id : " + partyId));
     }
 }

@@ -29,8 +29,4 @@ public class CommonUtil {
     public static String getRandomId() {
         return UUID.randomUUID().toString();
     }
-
-    public static String extractErrorCode(String errorKey) {
-        return errorKey.substring(errorKey.lastIndexOf("_") + 1);
-    }
 }
