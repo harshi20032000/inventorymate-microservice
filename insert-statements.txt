@@ -1,0 +1,144 @@
+INSERT INTO "order".orders (
+    order_id,
+    current_status,
+    order_date,
+    party_id,
+    remaining_bill_amount,
+    rep_id,
+    total_bill_amount,
+    total_order_quantity,
+    transport_id
+) VALUES
+(1, 'FULLY_PAID', '2026-03-05 14:31:30.074309+05:30', NULL, 0.0, 1, 99585.0, 291, NULL);
+
+INSERT INTO "order".order_status_history (
+    id,
+    order_status,
+    update_timestamp,
+    order_id
+) VALUES
+(1, 'CREATED', '2026-03-05 14:31:30.074309', 1),
+(2, 'CONFIRMED', '2026-03-05 14:51:27.420654', 1),
+(3, 'PARTIALLY_PAID', '2026-03-05 14:58:32.287546', 1),
+(4, 'PARTIALLY_PAID', '2026-03-05 14:59:43.628821', 1),
+(5, 'PARTIALLY_PAID', '2026-03-05 15:11:00.709638', 1),
+(6, 'FULLY_PAID', '2026-03-05 15:58:59.55967', 1);
+
+insert into "order".order_line_items(id,product_id,quantity,rate,order_id) values
+(1,4,111,435.00,1),
+(2,3,180,285.00,1);
+
+insert into "order".order_line_item_warehouse_quantities(order_line_item_id,quantity,warehouse_id) values(
+1,111,5),(
+2,70,2),(
+2,70,3),(
+2,40,5);
+
+insert into party.party(party_id,party_location,party_name,phone_no) values (
+3,Bangalore,Bakwas Events,9123456789),(
+4,Chennai,Grand Weddings,9988776655), (
+5,Mumbai,Premium Decor,9090909090), (
+1,Hyderabad City,Royal Caterers Updated,9876543211), (
+6,Rishra,Navier Tech,9090569090);
+
+INSERT INTO payment.payment (
+    pay_id,
+    order_id,
+    pay_amount,
+    pay_mode,
+    pay_type,
+    payment_confirmation_date,
+    payment_updated_date
+) VALUES 
+(1, 1, 785.00, 'UPI', 'PARTIAL', '2026-03-03', '2026-03-05'),
+(2, 1, 12785.00, 'UPI', 'ADVANCE', '2026-03-03', '2026-03-05'),
+(3, 1, 25000.00, 'UPI', 'ADVANCE', '2026-03-03', '2026-03-05'),
+(4, 1, 61015.00, 'UPI', 'PARTIAL', '2026-03-03', '2026-03-05');
+
+INSERT INTO product.product (
+    product_id,
+    base_price,
+    p_type,
+    product_code,
+    product_name
+) VALUES 
+(1, 1200.00, NULL, 'LP15', 'Laptop Pro 15'),
+(2, 25.00, NULL, 'WM01', 'Wireless Mouse'),
+(3, 150.00, NULL, 'OC10', 'Office Chair'),
+(4, 400.00, NULL, 'SD20', 'Standing Desk'),
+(6, 220.00, NULL, 'LM40', 'LED Monitor'),
+(8, 220.00, NULL, 'LM45', 'LED Monitor'),
+(9, 180.00, NULL, 'BS50', 'Bookshelf Unit'),
+(10, 95.00, NULL, 'GH60', 'Gaming Headset'),
+(12, 95.00, NULL, 'GH63', 'Gaming Headset');
+
+INSERT INTO warehouse.warehouse (
+    ware_id,
+    ware_code,
+    ware_name
+) VALUES
+(2, 'DK01', 'DANKUNI'),
+(3, 'RS01', 'RISHRA'),
+(5, 'HW01', 'HOWRAH');
+
+
+INSERT INTO warehouse.product_warehouse_quantity (
+    warehouse_id,
+    quantity,
+    product_id
+) VALUES
+(2, 50, 1),
+(2, 60, 6),
+(2, 90, 8),
+(2, 20, 9),
+(2, 150, 10),
+(2, 250, 12),
+(2, 330, 2),
+(3, 50, 1),
+(3, 60, 6),
+(3, 90, 8),
+(3, 20, 9),
+(3, 150, 10),
+(3, 250, 12),
+(3, 330, 2),
+(2, 0, 4),
+(3, 0, 4),
+(5, 50, 1),
+(5, 60, 6),
+(5, 90, 8),
+(5, 20, 9),
+(5, 150, 10),
+(5, 250, 12),
+(5, 330, 2),
+(5, 58, 4),
+(2, 0, 3),
+(3, 0, 3),
+(5, 30, 3);
+
+INSERT INTO transport.transport (
+    transport_id,
+    contact_details,
+    created_at,
+    transport_name,
+    updated_at
+) VALUES
+(1, '9876543210', '2026-02-17 16:13:24.045928+05:30', 'Sharma Logistics', '2026-02-17 16:13:24.045928+05:30'),
+(2, 'contact@sbtindia.com', '2026-02-17 16:14:12.140195+05:30', 'Sri Balaji Transport', '2026-02-17 16:14:12.140195+05:30'),
+(4, '+91-7980140018', '2026-02-17 16:19:36.104681+05:30', 'Harshi Freight Carriers', '2026-02-17 16:21:48.592516+05:30');
+
+INSERT INTO transport.transport_and_built_number (
+    id,
+    built_number,
+    transport_id,
+    created_at,
+    updated_at,
+    driver_contact,
+    driver_name
+) VALUES
+(1, 'MH12AB1234', 1, '2026-02-17 16:13:24.045928+05:30', '2026-02-17 16:13:24.045928+05:30', '9898989898', 'Ravi Kumar'),
+(2, 'KA03MN4567', 2, '2026-02-17 16:14:12.140195+05:30', '2026-02-17 16:14:12.140195+05:30', '9123456780', 'Suresh Reddy'),
+(3, 'DL01XY7890', 2, '2026-02-17 16:14:12.140195+05:30', '2026-02-17 16:14:12.140195+05:30', '9988776655', 'Amit Verma'),
+(10, 'TN10PQ2345', 4, '2026-02-17 16:21:48.592516+05:30', '2026-02-17 16:21:48.592516+05:30', '9000011111', 'Manoj Iyer'),
+(11, 'AP09RS6789', 4, '2026-02-17 16:21:48.592516+05:30', '2026-02-17 16:21:48.592516+05:30', '9333344444', 'Venkatesh Naidu'),
+(12, 'GJ05UV4321', 4, '2026-02-17 16:21:48.592516+05:30', '2026-02-17 16:21:48.592516+05:30', '9555566666', 'Harsh Patel'),
+(13, 'GJ05UV5341', 4, '2026-02-17 16:21:48.592516+05:30', '2026-02-17 16:21:48.592516+05:30', '7995555666', 'Siddhanath Dubey');
