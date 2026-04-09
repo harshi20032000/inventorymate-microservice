@@ -1,0 +1,10 @@
+product_id,base_price,p_type,product_code,product_name
+1,1200.00,,LP15,Laptop Pro 15
+2,25.00,,WM01,Wireless Mouse
+3,150.00,,OC10,Office Chair
+4,400.00,,SD20,Standing Desk
+6,220.00,,LM40,LED Monitor
+8,220.00,,LM45,LED Monitor
+9,180.00,,BS50,Bookshelf Unit
+10,95.00,,GH60,Gaming Headset
+12,95.00,,GH63,Gaming Headset

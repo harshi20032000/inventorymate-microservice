@@ -1,0 +1,5 @@
+pay_id,order_id,pay_amount,pay_mode,pay_type,payment_confirmation_date,payment_updated_date
+1,1,785.00,UPI,PARTIAL,2026-03-03,2026-03-05
+2,1,12785.00,UPI,ADVANCE,2026-03-03,2026-03-05
+3,1,25000.00,UPI,ADVANCE,2026-03-03,2026-03-05
+4,1,61015.00,UPI,PARTIAL,2026-03-03,2026-03-05

@@ -1,0 +1,2 @@
+order_id,current_status,order_date,party_id,remaining_bill_amount,rep_id,total_bill_amount,total_order_quantity,transport_id
+1,FULLY_PAID,2026-03-05 14:31:30.074309+05:30,,0.00,1,99585.00,291,
