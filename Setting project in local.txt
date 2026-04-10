@@ -13,18 +13,26 @@ Follow these steps to setup app in your local:
 
 4. Update the username and password for datasource accordingly in application.properties.
 
-5. Make sure the property -spring.jpa.hibernate.ddl-auto is set to "update"
+5. Change the property -spring.jpa.hibernate.ddl-auto is set from "validate" to "update"
 
 6. Start the services begining from eureka server first and then start each application one by one.
 
 7. hibernate.ddl-auto will make sure to create the respective schema and their table for each of the services.
 
-8. After all application successfully starts open - http://localhost:8761/ to see all registered services.
+8. You can skip step 5, 6, 7 and manually create schemas and tables using createSchema.txt, createTables.txt and insert-statement.txt
 
-9. Also open pgAdmin to check the schemas and tables created. After making sure the schema and tables are successfully created, change 
+9. After all application successfully starts open - http://localhost:8761/ to see all registered services.
+
+10. Also open pgAdmin to check the schemas and tables created. After making sure the schema and tables are successfully created, change 
   property -spring.jpa.hibernate.ddl-auto is set to "validate".
 
-10. Now run insert script to have basic data to test your services. 
+11. Now run insert script to have basic data to test your services. 
+
+12. Use services.postman_collection.json files to import collections into postman or bruno.
+
+13. Now start testing your application services by starting and testing with postman.
+
+Happy Coding!
   
 
 
