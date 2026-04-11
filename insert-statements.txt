@@ -142,3 +142,8 @@ INSERT INTO transport.transport_and_built_number (
 (11, 'AP09RS6789', 4, '2026-02-17 16:21:48.592516+05:30', '2026-02-17 16:21:48.592516+05:30', '9333344444', 'Venkatesh Naidu'),
 (12, 'GJ05UV4321', 4, '2026-02-17 16:21:48.592516+05:30', '2026-02-17 16:21:48.592516+05:30', '9555566666', 'Harsh Patel'),
 (13, 'GJ05UV5341', 4, '2026-02-17 16:21:48.592516+05:30', '2026-02-17 16:21:48.592516+05:30', '7995555666', 'Siddhanath Dubey');
+
+--this is test user id is im123 and password is Password@123. use login to check if it is working. then change password using change-password.
+INSERT INTO "user".user_register(
+	id, password, role, username)
+	VALUES (1,'$2a$10$lNXU7k.BMotpg1JCv/sMyOw6Dp22Nfu7qIF.SvoG.49Gx1XoJNOO2', 'ROLE_ADMIN', 'im123');
