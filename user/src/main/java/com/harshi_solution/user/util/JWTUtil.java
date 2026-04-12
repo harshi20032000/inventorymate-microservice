@@ -1,14 +1,14 @@
 package com.harshi_solution.user.util;
 
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.Date;
+
+import javax.crypto.SecretKey;
 
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 @Component
@@ -16,7 +16,7 @@ public class JWTUtil {
 
     private static final String SECRET_KEY = "your-secure-secret-key-min-32bytes";
 
-    private static final Key key = Keys.hmacShaKeyFor(
+    private static final SecretKey  key = Keys.hmacShaKeyFor(
             SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
     private static final long ACCESS_EXPIRY_MIN = 15;
@@ -32,22 +32,22 @@ public class JWTUtil {
 
     private String generateToken(String username, long expiryMinutes) {
         return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(
+                .subject(username)
+                .issuedAt(new Date())
+                .expiration(
                         new Date(System.currentTimeMillis()
                                 + expiryMinutes * 60 * 1000))
-                .signWith(key, SignatureAlgorithm.HS256)
+                .signWith(key)
                 .compact();
     }
 
     public String validateAndExtractUsername(String token) {
         try {
             return Jwts.parser()
-                    .setSigningKey(key)
+                    .verifyWith((SecretKey) key) 
                     .build()
-                    .parseClaimsJws(token)
-                    .getBody()
+                    .parseSignedClaims(token) 
+                    .getPayload()
                     .getSubject();
         } catch (JwtException e) {
             return null;
