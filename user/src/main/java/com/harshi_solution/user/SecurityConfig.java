@@ -45,7 +45,7 @@ public class SecurityConfig {
 
         @Bean
         public JWTAuthenticationProvider jwtAuthenticationProvider() {
-                return new JWTAuthenticationProvider(jwtUtil, userDetailsService);
+                return new JWTAuthenticationProvider(jwtUtil);
         }
 
         @Bean

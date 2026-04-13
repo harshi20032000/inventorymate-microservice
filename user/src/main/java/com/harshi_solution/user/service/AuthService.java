@@ -43,9 +43,11 @@ public class AuthService {
                         request.getPassword()));
 
         String username = authResult.getName();
+        UserRegisterEntity user = (UserRegisterEntity) authResult.getPrincipal();
+        String role = user.getRole().name();
 
-        String accessToken = jwtUtil.generateAccessToken(username);
-        String refreshToken = jwtUtil.generateRefreshToken(username);
+        String accessToken = jwtUtil.generateAccessToken(username, role);
+        String refreshToken = jwtUtil.generateRefreshToken(username, role);
 
         return new AuthResponseDTO(accessToken, refreshToken);
 
@@ -74,22 +76,26 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    public AuthResponseDTO refreshToken(
-            AuthResponseDTO request) {
+    public AuthResponseDTO refreshToken(AuthResponseDTO request) {
 
-        String username = jwtUtil.validateAndExtractUsername(
-                request.getRefreshToken());
+        String refreshToken = request.getRefreshToken();
 
+        String tokenType = jwtUtil.extractTokenType(refreshToken);
+        if (!"refresh".equals(tokenType)) {
+            throw new RuntimeException("Invalid token type");
+        }
+
+        String username = jwtUtil.validateAndExtractUsername(refreshToken);
         if (username == null) {
             throw new RuntimeException("Invalid refresh token");
         }
 
-        String newAccessToken = jwtUtil.generateAccessToken(username);
+        String role = jwtUtil.extractRole(refreshToken);
 
-        String newRefreshToken = jwtUtil.generateRefreshToken(username);
+        String newAccessToken = jwtUtil.generateAccessToken(username, role);
+        String newRefreshToken = jwtUtil.generateRefreshToken(username, role);
 
         return new AuthResponseDTO(newAccessToken, newRefreshToken);
-
     }
 
 }

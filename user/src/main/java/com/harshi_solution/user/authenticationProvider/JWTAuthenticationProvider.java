@@ -1,12 +1,14 @@
 package com.harshi_solution.user.authenticationProvider;
 
+import java.util.List;
+
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.harshi_solution.user.token.JWTAuthenticationToken;
 import com.harshi_solution.user.util.JWTUtil;
@@ -14,15 +16,15 @@ import com.harshi_solution.user.util.JWTUtil;
 public class JWTAuthenticationProvider implements AuthenticationProvider {
 
     private JWTUtil jwtUtil;
-    private UserDetailsService userDetailsService;
 
-    public JWTAuthenticationProvider(JWTUtil jwtUtil, UserDetailsService userDetailsService) {
+    public JWTAuthenticationProvider(JWTUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
-        this.userDetailsService = userDetailsService;
     }
 
     @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    public Authentication authenticate(Authentication authentication)
+            throws AuthenticationException {
+
         String token = ((JWTAuthenticationToken) authentication).getToken();
 
         String username = jwtUtil.validateAndExtractUsername(token);
@@ -30,8 +32,26 @@ public class JWTAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Invalid JWT Token");
         }
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        // 🔥 NEW: Validate token type
+        String type = jwtUtil.extractTokenType(token);
+        if (!"access".equals(type)) {
+            throw new BadCredentialsException("Invalid token type");
+        }
+
+        // 🔥 NEW: Extract role from token (NO DB CALL)
+        String role = jwtUtil.extractRole(token);
+        if (role == null) {
+            throw new BadCredentialsException("Role not found in token");
+        }
+
+        List<GrantedAuthority> authorities =
+                List.of(new SimpleGrantedAuthority(role));
+
+        return new UsernamePasswordAuthenticationToken(
+                username,
+                null,
+                authorities
+        );
     }
 
     @Override
