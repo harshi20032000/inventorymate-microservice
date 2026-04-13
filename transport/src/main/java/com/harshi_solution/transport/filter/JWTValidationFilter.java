@@ -1,19 +1,20 @@
-package com.harshi_solution.user.filter;
+package com.harshi_solution.transport.filter;
 
 import java.io.IOException;
 
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.harshi_solution.user.token.JWTAuthenticationToken;
+import com.harshi_solution.transport.token.JWTAuthenticationToken;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.lang.NonNull;
+
 public class JWTValidationFilter extends OncePerRequestFilter {
 
     private final AuthenticationManager authenticationManager;
