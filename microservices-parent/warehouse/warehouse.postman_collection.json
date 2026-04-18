@@ -9,6 +9,16 @@
     {
       "name": "create",
       "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsInJvbGUiOiJST0xFX0FETUlOIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3NjUzNDU0NSwiZXhwIjoxNzc2NTM1NDQ1fQ.K48OTQR-RgiWRYXo0F53s2f7YfFk448TC69wRlpHqgQ",
+              "type": "string"
+            }
+          ]
+        },
         "method": "POST",
         "header": [
           {
@@ -18,7 +28,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"wareName\": \"Howrah\",\r\n  \"wareCode\": \"HW01\"\r\n}",
+          "raw": "{\r\n  \"wareName\": \"Icchapur\",\r\n  \"wareCode\": \"IC01\"\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -45,6 +55,16 @@
     {
       "name": "get all",
       "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsInJvbGUiOiJST0xFX0FETUlOIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3NjUzNDU0NSwiZXhwIjoxNzc2NTM1NDQ1fQ.K48OTQR-RgiWRYXo0F53s2f7YfFk448TC69wRlpHqgQ",
+              "type": "string"
+            }
+          ]
+        },
         "method": "GET",
         "header": [],
         "url": {
@@ -67,10 +87,20 @@
     {
       "name": "get by id",
       "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsInJvbGUiOiJST0xFX0FETUlOIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3NjUzNDU0NSwiZXhwIjoxNzc2NTM1NDQ1fQ.K48OTQR-RgiWRYXo0F53s2f7YfFk448TC69wRlpHqgQ",
+              "type": "string"
+            }
+          ]
+        },
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:5008/api/v1/warehouses/1",
+          "raw": "http://localhost:5008/api/v1/warehouses/5",
           "protocol": "http",
           "host": [
             "localhost"
@@ -80,7 +110,7 @@
             "api",
             "v1",
             "warehouses",
-            "1"
+            "5"
           ]
         },
         "description": "Generated from cURL: curl --location 'http://localhost:8080/api/v1/warehouses/1'"
@@ -90,6 +120,16 @@
     {
       "name": "put",
       "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsInJvbGUiOiJST0xFX0FETUlOIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3NjUzNDU0NSwiZXhwIjoxNzc2NTM1NDQ1fQ.K48OTQR-RgiWRYXo0F53s2f7YfFk448TC69wRlpHqgQ",
+              "type": "string"
+            }
+          ]
+        },
         "method": "PUT",
         "header": [
           {
@@ -107,7 +147,7 @@
           }
         },
         "url": {
-          "raw": "http://localhost:5008/api/v1/warehouses/1",
+          "raw": "http://localhost:5008/api/v1/warehouses/8",
           "protocol": "http",
           "host": [
             "localhost"
@@ -117,7 +157,7 @@
             "api",
             "v1",
             "warehouses",
-            "1"
+            "8"
           ]
         },
         "description": "Generated from cURL: curl --location --request PUT 'http://localhost:8080/api/v1/warehouses/1' \\\r\n--header 'Content-Type: application/json' \\\r\n--data '{\r\n  \"wareName\": \"CentralHubUpdated\",\r\n  \"wareCode\": \"CH02\"\r\n}'"
@@ -127,6 +167,16 @@
     {
       "name": "patch",
       "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsInJvbGUiOiJST0xFX0FETUlOIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3NjUzNDU0NSwiZXhwIjoxNzc2NTM1NDQ1fQ.K48OTQR-RgiWRYXo0F53s2f7YfFk448TC69wRlpHqgQ",
+              "type": "string"
+            }
+          ]
+        },
         "method": "PATCH",
         "header": [
           {
@@ -144,7 +194,7 @@
           }
         },
         "url": {
-          "raw": "http://localhost:5008/api/v1/warehouses/1/products",
+          "raw": "http://localhost:5008/api/v1/warehouses/8/products",
           "protocol": "http",
           "host": [
             "localhost"
@@ -154,7 +204,7 @@
             "api",
             "v1",
             "warehouses",
-            "1",
+            "8",
             "products"
           ]
         },
@@ -165,10 +215,20 @@
     {
       "name": "delete",
       "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsInJvbGUiOiJST0xFX0FETUlOIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3NjUzNDU0NSwiZXhwIjoxNzc2NTM1NDQ1fQ.K48OTQR-RgiWRYXo0F53s2f7YfFk448TC69wRlpHqgQ",
+              "type": "string"
+            }
+          ]
+        },
         "method": "DELETE",
         "header": [],
         "url": {
-          "raw": "http://localhost:5008/api/v1/warehouses/1",
+          "raw": "http://localhost:5008/api/v1/warehouses/8",
           "protocol": "http",
           "host": [
             "localhost"
@@ -178,7 +238,7 @@
             "api",
             "v1",
             "warehouses",
-            "1"
+            "8"
           ]
         },
         "description": "Generated from cURL: curl --location --request DELETE 'http://localhost:8080/api/v1/warehouses/1'"
