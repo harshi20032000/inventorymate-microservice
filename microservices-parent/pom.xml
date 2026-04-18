@@ -65,11 +65,11 @@
         <module>auth-common</module>
         <module>user</module>
         <module>party</module>
-        <module>order</module>
         <module>payment</module>
         <module>product</module>
         <module>transport</module>
         <module>warehouse</module>
+        <module>order</module>
     </modules>
 
 </project>
