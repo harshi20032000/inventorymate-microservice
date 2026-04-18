@@ -2,6 +2,7 @@ package com.harshi_solution.party.service;
 
 import java.util.List;
 
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +24,7 @@ public class PartyServiceImpl implements PartyService {
     }
 
     @Override
-    public PartyResponseDTO saveParty(PartyRequestDTO request) {
+    public PartyResponseDTO saveParty(@NonNull PartyRequestDTO request) {
 
         if (partyRepository.existsByPartyName(request.getPartyName())) {
             throw new RuntimeException("Party with same name already exists");
@@ -47,7 +48,7 @@ public class PartyServiceImpl implements PartyService {
 
     @Override
     @Transactional(readOnly = true)
-    public PartyResponseDTO getPartyById(Long partyId) {
+    public PartyResponseDTO getPartyById(@NonNull Long partyId) {
 
         Party party = partyRepository.findById(partyId)
                 .orElseThrow(() -> new RuntimeException("Party not found"));
@@ -56,7 +57,7 @@ public class PartyServiceImpl implements PartyService {
     }
 
     @Override
-    public PartyResponseDTO updateParty(Long partyId, PartyRequestDTO request) {
+    public PartyResponseDTO updateParty(@NonNull Long partyId, PartyRequestDTO request) {
 
         Party existingParty = partyRepository.findById(partyId)
                 .orElseThrow(() -> new RuntimeException("Party not found"));
@@ -71,7 +72,7 @@ public class PartyServiceImpl implements PartyService {
     }
 
     @Override
-    public void deleteParty(Long partyId) {
+    public void deleteParty(@NonNull Long partyId) {
 
         Party party = partyRepository.findById(partyId)
                 .orElseThrow(() -> new RuntimeException("Party not found"));

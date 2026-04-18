@@ -10,7 +10,6 @@
 
     <artifactId>auth-common</artifactId>
     <packaging>jar</packaging>
-    <skip>true</skip>
 
     <dependencies>
 

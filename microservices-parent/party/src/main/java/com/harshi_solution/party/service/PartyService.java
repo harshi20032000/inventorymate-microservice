@@ -2,18 +2,20 @@ package com.harshi_solution.party.service;
 
 import java.util.List;
 
+import org.springframework.lang.NonNull;
+
 import com.harshi_solution.party.dto.PartyRequestDTO;
 import com.harshi_solution.party.dto.PartyResponseDTO;
 
 public interface PartyService {
 
-    PartyResponseDTO saveParty(PartyRequestDTO party);
+    PartyResponseDTO saveParty(@NonNull PartyRequestDTO party);
 
     List<PartyResponseDTO> getPartyList();
 
-    PartyResponseDTO getPartyById(Long partyId);
+    PartyResponseDTO getPartyById(@NonNull Long partyId);
 
-    PartyResponseDTO updateParty(Long partyId, PartyRequestDTO party);
+    PartyResponseDTO updateParty(@NonNull Long partyId, PartyRequestDTO party);
 
-    void deleteParty(Long partyId);
+    void deleteParty(@NonNull Long partyId);
 }

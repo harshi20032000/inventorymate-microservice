@@ -1,11 +1,21 @@
 package com.harshi_solution.party.dto;
 
 public class PartyRequestDTO {
+    private Long partyId;
+
     private String partyName;
 
     private String partyLocation;
 
     private String phoneNo;
+
+    public Long getPartyId() {
+        return partyId;
+    }
+
+    public void setPartyId(Long partyId) {
+        this.partyId = partyId;
+    }
 
     public String getPhoneNo() {
         return phoneNo;
