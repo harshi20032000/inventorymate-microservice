@@ -6,7 +6,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import com.harshi_solution.payment.dto.CreatePaymentRequest;
-import com.harshi_solution.payment.dto.DocumentRequestDTO;
 import com.harshi_solution.payment.dto.DocumentResponseDTO;
 import com.harshi_solution.payment.dto.PaymentResponseDTO;
 import com.harshi_solution.payment.entities.Document;
