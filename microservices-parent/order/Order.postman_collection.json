@@ -9,6 +9,16 @@
     {
       "name": "create order",
       "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsInJvbGUiOiJST0xFX0FETUlOIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3NjY4NTkxMywiZXhwIjoxNzc2Njg2ODEzfQ.7GcKVZFCHOtvJhvXmjG8M27zBnPkuwR5cCQMDCFEtmk",
+              "type": "string"
+            }
+          ]
+        },
         "method": "POST",
         "header": [
           {
@@ -45,6 +55,16 @@
     {
       "name": "add line items",
       "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsInJvbGUiOiJST0xFX0FETUlOIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3NjY4NjY5NSwiZXhwIjoxNzc2Njg3NTk1fQ.wZnxvIEA0o7KyoLVV7d0ZVmecOJ40GP9pkqTCSVv3lg",
+              "type": "string"
+            }
+          ]
+        },
         "method": "POST",
         "header": [
           {
@@ -54,7 +74,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"productId\": 1,\r\n    \"quantity\": 10,\r\n    \"rate\": 1500.00\r\n}",
+          "raw": "{\r\n    \"productId\": 3,\r\n    \"quantity\": 1,\r\n    \"rate\": 285.00\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -62,7 +82,7 @@
           }
         },
         "url": {
-          "raw": "http://localhost:5001/api/v1/orders/1/line-items",
+          "raw": "http://localhost:5001/api/v1/orders/2/line-items",
           "protocol": "http",
           "host": [
             "localhost"
@@ -72,7 +92,7 @@
             "api",
             "v1",
             "orders",
-            "1",
+            "2",
             "line-items"
           ]
         },
@@ -83,6 +103,16 @@
     {
       "name": "confirm order",
       "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsInJvbGUiOiJST0xFX0FETUlOIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3NjY4NjY5NSwiZXhwIjoxNzc2Njg3NTk1fQ.wZnxvIEA0o7KyoLVV7d0ZVmecOJ40GP9pkqTCSVv3lg",
+              "type": "string"
+            }
+          ]
+        },
         "method": "POST",
         "header": [
           {
@@ -92,7 +122,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"productId\": 1,\r\n    \"quantity\": 10,\r\n    \"rate\": 1500.00\r\n}",
+          "raw": "",
           "options": {
             "raw": {
               "language": "json"
@@ -100,7 +130,7 @@
           }
         },
         "url": {
-          "raw": "http://localhost:5001/api/v1/orders/6/confirm",
+          "raw": "http://localhost:5001/api/v1/orders/2/confirm",
           "protocol": "http",
           "host": [
             "localhost"
@@ -110,7 +140,7 @@
             "api",
             "v1",
             "orders",
-            "6",
+            "2",
             "confirm"
           ]
         },
@@ -119,16 +149,98 @@
       "response": []
     },
     {
+      "name": "add payment in order",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsInJvbGUiOiJST0xFX0FETUlOIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3NjY4NzY1OSwiZXhwIjoxNzc2Njg4NTU5fQ.eEZlVdB7jq5hNNYd9ROgAW1ocKgz-CmwbVkuvzb9-hY",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"payAmount\": 6,\r\n    \"payMode\": \"UPI\",\r\n    \"payType\": \"PARTIAL\",\r\n    \"paymentConfirmationDate\": \"2026-03-03\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5001/api/v1/orders/2/payments",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5001",
+          "path": [
+            "api",
+            "v1",
+            "orders",
+            "2",
+            "payments"
+          ]
+        },
+        "description": "Generated from cURL: curl --location 'http://localhost:8080/api/v1/orders/1/payments' \\\r\n--header 'Content-Type: application/json' \\\r\n--data '{\r\n    \"orderId\": 1,\r\n    \"payAmount\": 5000,\r\n    \"payMode\": \"UPI\",\r\n    \"payType\": \"ADVANCE\",\r\n    \"paymentConfirmationDate\": \"2026-03-05\"\r\n}'"
+      },
+      "response": []
+    },
+    {
       "name": "get by id",
       "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsInJvbGUiOiJST0xFX0FETUlOIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3NjY4NzY1OSwiZXhwIjoxNzc2Njg4NTU5fQ.eEZlVdB7jq5hNNYd9ROgAW1ocKgz-CmwbVkuvzb9-hY",
+              "type": "string"
+            }
+          ]
+        },
         "method": "GET",
-        "header": []
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5001/api/v1/orders/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5001",
+          "path": [
+            "api",
+            "v1",
+            "orders",
+            "2"
+          ]
+        }
       },
       "response": []
     },
     {
       "name": "get all orders",
       "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsInJvbGUiOiJST0xFX0FETUlOIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3NjY4NTkxMywiZXhwIjoxNzc2Njg2ODEzfQ.7GcKVZFCHOtvJhvXmjG8M27zBnPkuwR5cCQMDCFEtmk",
+              "type": "string"
+            }
+          ]
+        },
         "method": "GET",
         "header": [],
         "url": {

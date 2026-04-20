@@ -4,10 +4,11 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.harshi_solution.order.FeignConfig;
 import com.harshi_solution.order.dto.BaseUIResponse;
 import com.harshi_solution.order.dto.ProductResponseDTO;
 
-@FeignClient(name = "product-service")
+@FeignClient(name = "product-service", configuration = FeignConfig.class)
 public interface ProductClient {
 
     @GetMapping("/api/v1/products/{id}")

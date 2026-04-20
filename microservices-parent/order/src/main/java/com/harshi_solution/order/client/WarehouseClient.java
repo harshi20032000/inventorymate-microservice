@@ -7,12 +7,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.harshi_solution.order.FeignConfig;
 import com.harshi_solution.order.dto.BaseUIResponse;
 import com.harshi_solution.order.dto.ReserveStockRequest;
 import com.harshi_solution.order.dto.StockAllocationResponse;
 import com.harshi_solution.order.dto.WarehouseResponseDTO;
 
-@FeignClient(name = "warehouse-service")
+@FeignClient(name = "warehouse-service", configuration = FeignConfig.class)
 public interface WarehouseClient {
 
     @GetMapping("/api/v1/warehouses/{id}")
