@@ -9,6 +9,16 @@
     {
       "name": "create",
       "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsInJvbGUiOiJST0xFX0FETUlOIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3NjYwNDA1NiwiZXhwIjoxNzc2NjA0OTU2fQ.C8g-ubJpWlJedJAXiuozfV1bokYazmB1iad2JQVkVUk",
+              "type": "string"
+            }
+          ]
+        },
         "method": "POST",
         "header": [
           {
@@ -45,10 +55,20 @@
     {
       "name": "get Payment by Id",
       "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsInJvbGUiOiJST0xFX0FETUlOIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3NjYwNDA1NiwiZXhwIjoxNzc2NjA0OTU2fQ.C8g-ubJpWlJedJAXiuozfV1bokYazmB1iad2JQVkVUk",
+              "type": "string"
+            }
+          ]
+        },
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:5003/api/v1/payments/4",
+          "raw": "http://localhost:5003/api/v1/payments/5",
           "protocol": "http",
           "host": [
             "localhost"
@@ -58,7 +78,7 @@
             "api",
             "v1",
             "payments",
-            "4"
+            "5"
           ]
         },
         "description": "Generated from cURL: curl --location 'http://localhost:8080/api/v1/payments/1'"
@@ -68,10 +88,20 @@
     {
       "name": "get payment by order id",
       "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsInJvbGUiOiJST0xFX0FETUlOIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3NjYwNDA1NiwiZXhwIjoxNzc2NjA0OTU2fQ.C8g-ubJpWlJedJAXiuozfV1bokYazmB1iad2JQVkVUk",
+              "type": "string"
+            }
+          ]
+        },
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:5003/api/v1/payments/order/2",
+          "raw": "http://localhost:5003/api/v1/payments/order/1",
           "protocol": "http",
           "host": [
             "localhost"
@@ -82,7 +112,7 @@
             "v1",
             "payments",
             "order",
-            "2"
+            "1"
           ]
         },
         "description": "Generated from cURL: curl --location 'http://localhost:8080/api/v1/payments/order/1'"
@@ -92,6 +122,16 @@
     {
       "name": "get all payment",
       "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsInJvbGUiOiJST0xFX0FETUlOIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3NjYwNDA1NiwiZXhwIjoxNzc2NjA0OTU2fQ.C8g-ubJpWlJedJAXiuozfV1bokYazmB1iad2JQVkVUk",
+              "type": "string"
+            }
+          ]
+        },
         "method": "GET",
         "header": [],
         "url": {
@@ -114,6 +154,16 @@
     {
       "name": "delete payment by id",
       "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsInJvbGUiOiJST0xFX0FETUlOIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3NjYwNDA1NiwiZXhwIjoxNzc2NjA0OTU2fQ.C8g-ubJpWlJedJAXiuozfV1bokYazmB1iad2JQVkVUk",
+              "type": "string"
+            }
+          ]
+        },
         "method": "DELETE",
         "header": [],
         "url": {
