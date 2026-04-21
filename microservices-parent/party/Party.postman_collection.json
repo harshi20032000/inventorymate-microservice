@@ -1,0 +1,199 @@
+{
+  "info": {
+    "_postman_id": "0bf709c1-2f94-4393-b137-392387c2c3b6",
+    "name": "Party",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "19898680"
+  },
+  "item": [
+    {
+      "name": "create",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsInJvbGUiOiJST0xFX0FETUlOIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3NjUwODU1OCwiZXhwIjoxNzc2NTA5NDU4fQ.iSgc5TgW4AxOZxYLTDkQctRDfB0CqFYsg6xCvcGykcA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n   \"partyName\": \"H Decor\",\r\n    \"partyLocation\": \"Mumbai\",\r\n    \"phoneNo\": \"9090909090\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5002/api/v1/parties",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5002",
+          "path": [
+            "api",
+            "v1",
+            "parties"
+          ]
+        },
+        "description": "Generated from cURL: curl --location 'http://localhost:8080/api/v1/parties' \\\r\n--header 'Content-Type: application/json' \\\r\n--data '{\r\n    \"partyName\": \"Royal Caterers\",\r\n    \"partyLocation\": \"Hyderabad\",\r\n    \"phoneNo\": \"9876543210\"\r\n}'"
+      },
+      "response": []
+    },
+    {
+      "name": "get by id",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsInJvbGUiOiJST0xFX0FETUlOIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3NjUwODU1OCwiZXhwIjoxNzc2NTA5NDU4fQ.iSgc5TgW4AxOZxYLTDkQctRDfB0CqFYsg6xCvcGykcA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5002/api/v1/parties/7",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5002",
+          "path": [
+            "api",
+            "v1",
+            "parties",
+            "7"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get all",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsInJvbGUiOiJST0xFX0FETUlOIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3NjUwODU1OCwiZXhwIjoxNzc2NTA5NDU4fQ.iSgc5TgW4AxOZxYLTDkQctRDfB0CqFYsg6xCvcGykcA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5002/api/v1/parties",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5002",
+          "path": [
+            "api",
+            "v1",
+            "parties"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "update party",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsInJvbGUiOiJST0xFX0FETUlOIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3NjUwODU1OCwiZXhwIjoxNzc2NTA5NDU4fQ.iSgc5TgW4AxOZxYLTDkQctRDfB0CqFYsg6xCvcGykcA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"partyName\": \"Royal  Updated\",\r\n    \"partyLocation\": \"Hyderabad City\",\r\n    \"phoneNo\": \"9876543211\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5002/api/v1/parties/7",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5002",
+          "path": [
+            "api",
+            "v1",
+            "parties",
+            "7"
+          ]
+        },
+        "description": "Generated from cURL: curl --location --request PUT 'http://localhost:8080/api/v1/parties/1' \\\r\n--header 'Content-Type: application/json' \\\r\n--data '{\r\n    \"partyName\": \"Royal Caterers Updated\",\r\n    \"partyLocation\": \"Hyderabad City\",\r\n    \"phoneNo\": \"9876543211\"\r\n}'"
+      },
+      "response": []
+    },
+    {
+      "name": "delete party",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYWh1bDEyMyIsInJvbGUiOiJST0xFX0FETUlOIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3NjUwODU1OCwiZXhwIjoxNzc2NTA5NDU4fQ.iSgc5TgW4AxOZxYLTDkQctRDfB0CqFYsg6xCvcGykcA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5002/api/v1/parties/7",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5002",
+          "path": [
+            "api",
+            "v1",
+            "parties",
+            "7"
+          ]
+        },
+        "description": "Generated from cURL: curl --location --request DELETE 'http://localhost:8080/api/v1/parties/1'"
+      },
+      "response": []
+    }
+  ]
+}

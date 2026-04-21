@@ -1,72 +1,40 @@
-InventryMate modernisation
+InventoryMate 
 
-Order		-5001
-Party		-5002
-Payment		-5003
-Product		-5004
-Reps		-5005
-Transport	-5006
-User		-5007
-Warehouse	-5008
+This project contains services like order, party, payment, product, transport, user, warehouse. 
+We are using netflix eureka server to register the services. 
+
+Follow these steps to setup app in your local:
+
+1. Install java 21, postgresql and vscode(or any ide of your choice), install postman/bruno for testing, git for version management.
+
+2. Clone the project using the link mentioned in github.
+
+3. In each of the services(e.g. order, party, payment, product, transport, user, warehouse) go to files - \src\main\resources\application.properties.
+
+4. Update the username and password for datasource accordingly in application.properties.
+
+5. Change the property -spring.jpa.hibernate.ddl-auto is set from "validate" to "update"
+
+6. Start the services begining from eureka server first and then start each application one by one.
+
+7. hibernate.ddl-auto will make sure to create the respective schema and their table for each of the services.
+
+8. You can skip step 5, 6, 7 and manually create schemas and tables using createSchema.txt, createTables.txt and insert-statement.txt
+
+9. After all application successfully starts open - http://localhost:8761/ to see all registered services.
+
+10. Also open pgAdmin to check the schemas and tables created. After making sure the schema and tables are successfully created, change 
+  property -spring.jpa.hibernate.ddl-auto is set to "validate".
+
+11. Now run insert script to have basic data to test your services. 
+
+12. Use services.postman_collection.json files to import collections into postman or bruno.
+
+13. Now start testing your application services by starting and testing with postman.
+
+Happy Coding!
+  
+
 
 Later use font - frutiger
 
-
-
-1. Create the respective schema in local. 
-
-
-For Transport use the following request bodies
-
-{
-  "transportName": "Sharma Logistics",
-  "contactDetails": "9876543210",
-  "vehicles": [
-    {
-      "builtNumber": "MH12AB1234",
-      "driverName": "Ravi Kumar",
-      "driverContact": "9898989898"
-    }
-  ]
-}
-
-
-{
-  "transportName": "Sri Balaji Transport",
-  "contactDetails": "contact@sbtindia.com",
-  "vehicles": [
-    {
-      "builtNumber": "KA03MN4567",
-      "driverName": "Suresh Reddy",
-      "driverContact": "9123456780"
-    },
-    {
-      "builtNumber": "DL01XY7890",
-      "driverName": "Amit Verma",
-      "driverContact": "9988776655"
-    }
-  ]
-}
-
-
-{
-  "transportName": "Ganga Freight Carriers",
-  "contactDetails": "+91-8045678901",
-  "vehicles": [
-    {
-      "builtNumber": "TN10PQ2345",
-      "driverName": "Manoj Iyer",
-      "driverContact": "9000011111"
-    },
-    {
-      "builtNumber": "AP09RS6789",
-      "driverName": "Venkatesh Naidu",
-      "driverContact": "9333344444"
-    },
-    {
-      "builtNumber": "GJ05UV4321",
-      "driverName": "Harsh Patel",
-      "driverContact": "9555566666"
-    }
-  ]
-}

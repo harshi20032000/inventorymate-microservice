@@ -1,0 +1,232 @@
+INSERT INTO "user".user_register(
+	id, password, role, username)
+	VALUES (1,'$2a$10$lNXU7k.BMotpg1JCv/sMyOw6Dp22Nfu7qIF.SvoG.49Gx1XoJNOO2', 'ROLE_ADMIN', 'harshi123');
+	
+	Three credential for testing purpose: harshi123, Test@123
+										viewer1, Password@123
+										
+	
+	postman request POST 'http://localhost:5007/api/v1/user/login' \
+  --header 'content-type: application/json' \
+  --body '{
+  "username": "harshi123",
+  "password": "Password@123"
+}'
+
+{
+    "code": "0",
+    "message": null,
+    "extendedMessage": null,
+    "status": "SUCCESS",
+    "hasError": false,
+    "responsePayload": {
+        "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzU4OTQzNDIsImV4cCI6MTc3NTg5NTI0Mn0.UNy8ALtvMO8aLdJD6Nunx6APIVMahUiAWWv55WUL-GE",
+        "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzU4OTQzNDIsImV4cCI6MTc3NjQ5OTE0Mn0.MjvZiCohK4AcPSCYg9HfG4SDG8dn3E4yBP55frqKnPQ"
+    }
+}
+
+-----------------------------------------------------------
+postman request POST 'http://localhost:5007/api/v1/user/change-password' \
+  --header 'content-type: application/json' \
+  --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzU4OTc1NDEsImV4cCI6MTc3NTg5ODQ0MX0.PwoJ_OgKcqkS7cCvOV-PTCa8_9eDFWJS7va4CeLLC6U' \
+  --body '{
+  "oldPassword": "Password@123",
+  "newPassword": "Test@123"
+}' \
+  --auth-bearer-token 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzU4OTc1NDEsImV4cCI6MTc3NTg5ODQ0MX0.PwoJ_OgKcqkS7cCvOV-PTCa8_9eDFWJS7va4CeLLC6U'
+
+{
+    "code": "0",
+    "message": null,
+    "extendedMessage": null,
+    "status": "SUCCESS",
+    "hasError": false,
+    "responsePayload": "Password changed successfully"
+}
+
+-------------------------------------------------------------
+
+postman request POST 'http://localhost:5007/api/v1/user/refresh-token' \
+  --header 'content-type: application/json' \
+  --body '{
+    "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzU4OTc1NDEsImV4cCI6MTc3NTg5ODQ0MX0.PwoJ_OgKcqkS7cCvOV-PTCa8_9eDFWJS7va4CeLLC6U"
+}'
+
+{
+    "code": "0",
+    "message": null,
+    "extendedMessage": null,
+    "status": "SUCCESS",
+    "hasError": false,
+    "responsePayload": {
+        "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzU4OTc4MTcsImV4cCI6MTc3NTg5ODcxN30.ImPKLAzmEzkWKVNn_En6LUYrOCUBqbvWkw4v-33buwE",
+        "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzU4OTc4MTcsImV4cCI6MTc3NjUwMjYxN30.HYecltxoVRx9OoZydTwsUAdw6K5-O2LDftI25xltJV4"
+    }
+}
+
+---------------------------------------------------------------
+
+postman request POST 'http://localhost:5007/api/v1/admin/register-viewer' \
+  --header 'authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzU4OTc4MTcsImV4cCI6MTc3NTg5ODcxN30.ImPKLAzmEzkWKVNn_En6LUYrOCUBqbvWkw4v-33buwE' \
+  --header 'content-type: application/json' \
+  --body '{
+  "username": "viewer1",
+  "password": "Password@123"
+}' \
+  --auth-bearer-token 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzU4OTc4MTcsImV4cCI6MTc3NTg5ODcxN30.ImPKLAzmEzkWKVNn_En6LUYrOCUBqbvWkw4v-33buwE'
+
+{
+    "code": "0",
+    "message": null,
+    "extendedMessage": null,
+    "status": "SUCCESS",
+    "hasError": false,
+    "responsePayload": "Viewer registered successfully"
+}
+
+-------------------------------------------------------------------
+
+postman request POST 'http://localhost:5007/api/v1/admin/register-reps' \
+  --header 'authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzU4OTc4MTcsImV4cCI6MTc3NTg5ODcxN30.ImPKLAzmEzkWKVNn_En6LUYrOCUBqbvWkw4v-33buwE' \
+  --header 'content-type: application/json' \
+  --body '{
+  "repName": "Test User 1",
+  "repLocation": "Napoli",
+  "username": "testuser1",
+  "password": "Password@123"
+}
+' \
+  --auth-bearer-token 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzU4OTc4MTcsImV4cCI6MTc3NTg5ODcxN30.ImPKLAzmEzkWKVNn_En6LUYrOCUBqbvWkw4v-33buwE'
+
+{
+    "code": "0",
+    "message": null,
+    "extendedMessage": null,
+    "status": "SUCCESS",
+    "hasError": false,
+    "responsePayload": "Reps registered successfully"
+}
+
+--------------------------------------------------------------------
+
+postman request 'http://localhost:5007/api/v1/admin/users?role=ROLE_ADMIN' \
+  --header 'authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzU4OTc4MTcsImV4cCI6MTc3NTg5ODcxN30.ImPKLAzmEzkWKVNn_En6LUYrOCUBqbvWkw4v-33buwE' \
+  --auth-bearer-token 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzU4OTc4MTcsImV4cCI6MTc3NTg5ODcxN30.ImPKLAzmEzkWKVNn_En6LUYrOCUBqbvWkw4v-33buwE'
+
+{
+    "code": "0",
+    "message": null,
+    "extendedMessage": null,
+    "status": "SUCCESS",
+    "hasError": false,
+    "responsePayload": [
+        {
+            "id": 1,
+            "username": "harshi123",
+            "role": "ROLE_ADMIN"
+        }
+    ]
+}
+
+------------------------------------------------------------------------
+
+postman request 'http://localhost:5007/api/v1/reps' \
+  --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzU4OTc4MTcsImV4cCI6MTc3NTg5ODcxN30.ImPKLAzmEzkWKVNn_En6LUYrOCUBqbvWkw4v-33buwE' \
+  --auth-bearer-token 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzU4OTc4MTcsImV4cCI6MTc3NTg5ODcxN30.ImPKLAzmEzkWKVNn_En6LUYrOCUBqbvWkw4v-33buwE'
+
+{
+    "code": "0",
+    "message": null,
+    "extendedMessage": null,
+    "status": "SUCCESS",
+    "hasError": false,
+    "responsePayload": [
+        {
+            "repId": 1,
+            "repName": "TEST USER 1",
+            "repLocation": "NAPOLI",
+            "username": "testuser1"
+        }
+    ]
+}
+
+------------------------------------------------------------------------
+
+
+
+
+postman request 'http://localhost:5007/api/v1/reps/1' \
+
+  --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzU4OTc4MTcsImV4cCI6MTc3NTg5ODcxN30.ImPKLAzmEzkWKVNn_En6LUYrOCUBqbvWkw4v-33buwE' \
+
+  --auth-bearer-token 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzU4OTc4MTcsImV4cCI6MTc3NTg5ODcxN30.ImPKLAzmEzkWKVNn_En6LUYrOCUBqbvWkw4v-33buwE'
+
+
+
+{
+
+    "code": "0",
+
+    "message": null,
+
+    "extendedMessage": null,
+
+    "status": "SUCCESS",
+
+    "hasError": false,
+
+    "responsePayload": {
+
+        "repId": 1,
+
+        "repName": "TEST USER 1",
+
+        "repLocation": "NAPOLI",
+
+        "username": "testuser1"
+
+    }
+
+}
+
+-------------------------------------------------------------------
+
+postman request PATCH 'http://localhost:5007/api/v1/reps/1' \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzU4OTc4MTcsImV4cCI6MTc3NTg5ODcxN30.ImPKLAzmEzkWKVNn_En6LUYrOCUBqbvWkw4v-33buwE' \
+  --body '{
+    "repLocation": "kolkata",
+    "repName": "NISHA Ventures"
+}' \
+  --auth-bearer-token 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzU4OTc4MTcsImV4cCI6MTc3NTg5ODcxN30.ImPKLAzmEzkWKVNn_En6LUYrOCUBqbvWkw4v-33buwE'
+  
+  {
+    "code": "0",
+    "message": null,
+    "extendedMessage": null,
+    "status": "SUCCESS",
+    "hasError": false,
+    "responsePayload": {
+        "repId": 1,
+        "repName": "NISHA Ventures",
+        "repLocation": "kolkata",
+        "username": "testuser1"
+    }
+}
+
+-----------------------------------------------------------------------
+
+postman request DELETE 'http://localhost:5007/api/v1/reps/1' \
+  --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzU4OTc4MTcsImV4cCI6MTc3NTg5ODcxN30.ImPKLAzmEzkWKVNn_En6LUYrOCUBqbvWkw4v-33buwE' \
+  --auth-bearer-token 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGkxMjMiLCJpYXQiOjE3NzU4OTc4MTcsImV4cCI6MTc3NTg5ODcxN30.ImPKLAzmEzkWKVNn_En6LUYrOCUBqbvWkw4v-33buwE'
+  
+ {
+    "code": "0",
+    "message": null,
+    "extendedMessage": null,
+    "status": "SUCCESS",
+    "hasError": false,
+    "responsePayload": "Rep with ID 1 deleted successfully."
+}
+
+-----------------------------------------------------------------------------
