@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
 
   eureka-server:
@@ -9,8 +8,6 @@ services:
       - "8761:8761"
     networks:
       - inventorymate-net
-
-
 
   order-service:
     build: ./order
@@ -93,6 +90,14 @@ services:
       - eureka-server
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+    networks:
+      - inventorymate-net
+
+  frontend:   
+    build: ../../inventorymate-frontend
+    container_name: frontend
+    ports:
+      - "3000:80"
     networks:
       - inventorymate-net
 
