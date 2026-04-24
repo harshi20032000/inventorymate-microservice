@@ -63,6 +63,7 @@
     <modules>
         <module>eureka-server</module>
         <module>auth-common</module>
+        <module>audit-trail</module>
         <module>user</module>
         <module>product</module>
         <module>transport</module>
