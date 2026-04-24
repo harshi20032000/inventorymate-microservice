@@ -3,6 +3,7 @@ package com.harshi_solution.user.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,7 +22,7 @@ import com.harshi_solution.user.repo.UserRegisterEntityRepository;
 @Service
 public class UserRegisterEntityService implements UserDetailsService {
 
-private final UserRegisterEntityRepository userRepository;
+    private final UserRegisterEntityRepository userRepository;
 
     public UserRegisterEntityService(UserRegisterEntityRepository userRepository) {
         this.userRepository = userRepository;
@@ -77,15 +78,23 @@ private final UserRegisterEntityRepository userRepository;
 
     public List<UserResponseDTO> getUsersByRole(Role role) {
 
-    return userRepository.findByRole(role)
-            .stream()
-            .map(user -> new UserResponseDTO(
-                    user.getId(),
-                    user.getUsername(),
-                    user.getRole()
-            ))
-            .toList();
-}
+        return userRepository.findByRole(role)
+                .stream()
+                .map(user -> new UserResponseDTO(
+                        user.getId(),
+                        user.getUsername(),
+                        user.getRole()))
+                .toList();
+    }
 
+    @Transactional
+    public void deleteViewerById(@NonNull Long id) {
 
+        UserRegisterEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(
+                        "Viewer not found with id: " + id));
+
+        // Then delete linked user
+        userRepository.delete(user);
+    }
 }

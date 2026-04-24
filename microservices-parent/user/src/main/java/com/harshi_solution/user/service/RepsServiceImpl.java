@@ -2,6 +2,7 @@ package com.harshi_solution.user.service;
 
 import java.util.List;
 
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.harshi_solution.user.dto.RepRequestDTO;
@@ -81,7 +82,7 @@ public class RepsServiceImpl implements RepsService {
                         "Rep not found with id: " + repId));
 
         // Delete rep first (because it owns the FK)
-        repsRepository.delete(rep);
+        repsRepository.delete( rep);
 
         // Then delete linked user
         userRepository.delete(rep.getUser());
