@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.harshi_solution.transport.dto.BaseUIResponse;
+import com.harshi_solution.auth.dto.BaseUIResponse;
 import com.harshi_solution.transport.dto.TransportRequestDTO;
 import com.harshi_solution.transport.dto.TransportResponseDTO;
 import com.harshi_solution.transport.service.TransportService;
