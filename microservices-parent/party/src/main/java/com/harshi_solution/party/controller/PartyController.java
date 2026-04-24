@@ -2,6 +2,7 @@ package com.harshi_solution.party.controller;
 
 import java.util.List;
 
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.harshi_solution.party.dto.BaseUIResponse;
+import com.harshi_solution.auth.dto.BaseUIResponse;
+import com.harshi_solution.auth.util.ResponseBuilder;
 import com.harshi_solution.party.dto.PartyRequestDTO;
 import com.harshi_solution.party.dto.PartyResponseDTO;
 import com.harshi_solution.party.service.PartyService;
-import com.harshi_solution.party.util.ResponseBuilder;
 
 import jakarta.validation.Valid;
 
@@ -31,7 +32,7 @@ public class PartyController {
 
     @PostMapping
     public BaseUIResponse<PartyResponseDTO> createParty(
-            @Valid @RequestBody PartyRequestDTO request) {
+            @Valid @RequestBody @NonNull PartyRequestDTO request) {
 
         PartyResponseDTO response = partyService.saveParty(request);
 
@@ -48,7 +49,7 @@ public class PartyController {
 
     @GetMapping("/{partyId}")
     public BaseUIResponse<PartyResponseDTO> getPartyById(
-            @PathVariable Long partyId) {
+            @PathVariable @NonNull Long partyId) {
 
         PartyResponseDTO party = partyService.getPartyById(partyId);
 
@@ -57,7 +58,7 @@ public class PartyController {
 
     @PutMapping("/{partyId}")
     public BaseUIResponse<PartyResponseDTO> updateParty(
-            @PathVariable Long partyId,
+            @PathVariable @NonNull Long partyId,
             @Valid @RequestBody PartyRequestDTO request) {
 
         PartyResponseDTO updatedParty = partyService.updateParty(partyId, request);
@@ -66,7 +67,7 @@ public class PartyController {
     }
 
     @DeleteMapping("/{partyId}")
-    public BaseUIResponse<Void> deleteParty(@PathVariable Long partyId) {
+    public BaseUIResponse<Void> deleteParty(@PathVariable @NonNull Long partyId) {
 
         partyService.deleteParty(partyId);
 
