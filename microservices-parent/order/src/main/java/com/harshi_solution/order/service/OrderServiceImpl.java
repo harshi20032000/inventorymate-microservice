@@ -5,16 +5,17 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.harshi_solution.auth.dto.BaseUIResponse;
 import com.harshi_solution.order.client.PaymentClient;
 import com.harshi_solution.order.client.ProductClient;
 import com.harshi_solution.order.client.WarehouseClient;
 import com.harshi_solution.order.dto.AddLineItemRequest;
-import com.harshi_solution.order.dto.CreatePaymentRequest;
-import com.harshi_solution.order.dto.BaseUIResponse;
 import com.harshi_solution.order.dto.CreateOrderRequest;
+import com.harshi_solution.order.dto.CreatePaymentRequest;
 import com.harshi_solution.order.dto.OrderResponseDTO;
 import com.harshi_solution.order.dto.PaymentResponseDTO;
 import com.harshi_solution.order.dto.ProductResponseDTO;
@@ -75,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderResponseDTO addLineItem(Long orderId, AddLineItemRequest request) {
+    public OrderResponseDTO addLineItem(@NonNull Long orderId, AddLineItemRequest request) {
 
         // Fetch Order
         Order order = orderRepository.findById(orderId)
@@ -127,7 +128,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderResponseDTO confirmOrder(Long orderId) {
+    public OrderResponseDTO confirmOrder(@NonNull Long orderId) {
 
         // Fetch order
         Order order = orderRepository.findById(orderId)
@@ -169,7 +170,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
    @Override
-public OrderResponseDTO addPayment(Long orderId, CreatePaymentRequest request) {
+public OrderResponseDTO addPayment(@NonNull Long orderId, CreatePaymentRequest request) {
 
     Order order = orderRepository.findById(orderId)
             .orElseThrow(() -> new RuntimeException("Order not found with id: " + orderId));
@@ -230,7 +231,7 @@ public OrderResponseDTO addPayment(Long orderId, CreatePaymentRequest request) {
 
     @Override
     @Transactional(readOnly = true)
-    public OrderResponseDTO getOrderById(Long orderId) {
+    public OrderResponseDTO getOrderById(@NonNull Long orderId) {
 
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found with id: " + orderId));

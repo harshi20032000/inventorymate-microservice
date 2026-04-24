@@ -2,6 +2,7 @@ package com.harshi_solution.order.controller;
 
 import java.util.List;
 
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.harshi_solution.auth.dto.BaseUIResponse;
+import com.harshi_solution.auth.util.ResponseBuilder;
 import com.harshi_solution.order.dto.AddLineItemRequest;
-import com.harshi_solution.order.dto.CreatePaymentRequest;
-import com.harshi_solution.order.dto.BaseUIResponse;
 import com.harshi_solution.order.dto.CreateOrderRequest;
+import com.harshi_solution.order.dto.CreatePaymentRequest;
 import com.harshi_solution.order.dto.OrderResponseDTO;
 import com.harshi_solution.order.service.OrderService;
-import com.harshi_solution.order.util.ResponseBuilder;
 
 @RestController
 @RequestMapping("/api/v1/orders")
@@ -37,7 +38,7 @@ public class OrderController {
 
     @PostMapping("/{orderId}/line-items")
     public BaseUIResponse<OrderResponseDTO> addLineItem(
-            @PathVariable Long orderId,
+            @PathVariable @NonNull Long orderId,
             @RequestBody AddLineItemRequest request) {
 
         OrderResponseDTO response = orderService.addLineItem(orderId, request);
@@ -47,7 +48,7 @@ public class OrderController {
 
     @PostMapping("/{orderId}/confirm")
     public BaseUIResponse<OrderResponseDTO> confirmOrder(
-            @PathVariable Long orderId) {
+            @PathVariable @NonNull Long orderId) {
 
         OrderResponseDTO response = orderService.confirmOrder(orderId);
 
@@ -56,7 +57,7 @@ public class OrderController {
 
     @PostMapping("/{orderId}/payments")
     public BaseUIResponse<OrderResponseDTO> addPayment(
-            @PathVariable Long orderId,
+            @PathVariable @NonNull Long orderId,
             @RequestBody CreatePaymentRequest request) {
 
         OrderResponseDTO response = orderService.addPayment(orderId, request);
@@ -66,7 +67,7 @@ public class OrderController {
 
     @GetMapping("/{orderId}")
     public BaseUIResponse<OrderResponseDTO> getOrderById(
-            @PathVariable Long orderId) {
+            @PathVariable @NonNull Long orderId) {
 
         return ResponseBuilder.success("Order fetched successfully", orderService.getOrderById(orderId));
     }

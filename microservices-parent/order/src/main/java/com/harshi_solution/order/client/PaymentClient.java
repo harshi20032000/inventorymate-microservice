@@ -4,8 +4,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.harshi_solution.auth.dto.BaseUIResponse;
 import com.harshi_solution.order.FeignConfig;
-import com.harshi_solution.order.dto.BaseUIResponse;
 import com.harshi_solution.order.dto.CreatePaymentRequest;
 import com.harshi_solution.order.dto.PaymentResponseDTO;
 
