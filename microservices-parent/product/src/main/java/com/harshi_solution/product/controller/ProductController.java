@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.harshi_solution.product.dto.BaseUIResponse;
+import com.harshi_solution.auth.dto.BaseUIResponse;
+import com.harshi_solution.auth.util.ResponseBuilder;
 import com.harshi_solution.product.dto.ProductRequestDTO;
 import com.harshi_solution.product.dto.ProductResponseDTO;
 import com.harshi_solution.product.service.ProductService;
-import com.harshi_solution.product.util.ResponseBuilder;
 
 import jakarta.validation.Valid;
 
