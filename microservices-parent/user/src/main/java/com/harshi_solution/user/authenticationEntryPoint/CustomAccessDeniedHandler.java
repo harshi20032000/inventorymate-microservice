@@ -7,7 +7,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.harshi_solution.user.dto.BaseUIResponse;
+import com.harshi_solution.auth.dto.BaseUIResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

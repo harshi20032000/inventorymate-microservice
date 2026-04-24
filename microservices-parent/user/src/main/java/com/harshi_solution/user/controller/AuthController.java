@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.harshi_solution.user.dto.AuthResponseDTO;
-import com.harshi_solution.user.dto.BaseUIResponse;
+import com.harshi_solution.auth.dto.BaseUIResponse;
 import com.harshi_solution.user.dto.ChangePasswordRequest;
 import com.harshi_solution.user.dto.LoginRequest;
 import com.harshi_solution.user.service.AuthService;

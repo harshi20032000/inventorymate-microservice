@@ -3,6 +3,7 @@ package com.harshi_solution.user.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.harshi_solution.user.dto.BaseUIResponse;
+import com.harshi_solution.auth.dto.BaseUIResponse;
 import com.harshi_solution.user.dto.RegisterRepsRequest;
 import com.harshi_solution.user.dto.RegisterViewerRequest;
 import com.harshi_solution.user.dto.UserResponseDTO;
@@ -65,7 +66,7 @@ public class AdminController {
     @Operation(summary = "delete Viewer using Id", description = "used to delete Viewer using Id")
     @DeleteMapping("/{id}")
     public BaseUIResponse<String> deleteViewer(
-            @PathVariable Long id) {
+            @PathVariable @NonNull Long id) {
 
         userRegisterEntityService.deleteViewerById(id);
 

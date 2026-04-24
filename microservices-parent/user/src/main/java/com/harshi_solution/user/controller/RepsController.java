@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.harshi_solution.user.dto.BaseUIResponse;
+import com.harshi_solution.auth.dto.BaseUIResponse;
 import com.harshi_solution.user.dto.RepRequestDTO;
 import com.harshi_solution.user.dto.RepResponseDTO;
 import com.harshi_solution.user.service.RepsService;
