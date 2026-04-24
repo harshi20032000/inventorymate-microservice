@@ -2,16 +2,14 @@ package com.harshi_solution.user.service;
 
 import java.util.List;
 
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.harshi_solution.user.dto.RepRequestDTO;
 import com.harshi_solution.user.dto.RepResponseDTO;
 import com.harshi_solution.user.entities.Reps;
 import com.harshi_solution.user.repo.RepsRepository;
 import com.harshi_solution.user.repo.UserRegisterEntityRepository;
-
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RepsServiceImpl implements RepsService {

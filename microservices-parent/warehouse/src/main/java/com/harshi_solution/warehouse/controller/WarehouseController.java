@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.harshi_solution.warehouse.dto.BaseUIResponse;
+import com.harshi_solution.auth.dto.BaseUIResponse;
 import com.harshi_solution.warehouse.dto.ReserveStockRequest;
 import com.harshi_solution.warehouse.dto.StockAllocationResponse;
 import com.harshi_solution.warehouse.dto.WarehouseRequestDTO;
 import com.harshi_solution.warehouse.dto.WarehouseResponseDTO;
 import com.harshi_solution.warehouse.service.WarehouseService;
-import com.harshi_solution.warehouse.util.ResponseBuilder;
+import com.harshi_solution.auth.util.ResponseBuilder;
 
 import jakarta.validation.Valid;
 

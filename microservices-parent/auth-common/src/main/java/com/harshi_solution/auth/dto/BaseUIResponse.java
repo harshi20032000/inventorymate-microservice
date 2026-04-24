@@ -1,10 +1,11 @@
-package com.harshi_solution.warehouse.dto;
+package com.harshi_solution.auth.dto;
+
 
 import java.io.Serializable;
 
-import com.harshi_solution.warehouse.util.CommonUtil;
-import com.harshi_solution.warehouse.util.Constants;
-import com.harshi_solution.warehouse.util.ErrorMessageEnum;
+import com.harshi_solution.auth.util.CommonUtil;
+import com.harshi_solution.auth.util.Constants;
+import com.harshi_solution.auth.util.ErrorMessageEnum;
 
 public class BaseUIResponse<T> implements Serializable {
 	private static final long serialVersionUID = 7980140018L;
@@ -83,3 +84,4 @@ public class BaseUIResponse<T> implements Serializable {
 				+ ", status=" + status + ", hasError=" + hasError + ", responsePayload=" + responsePayload + "]";
 	}
 }
+

@@ -1,4 +1,5 @@
-package com.harshi_solution.warehouse.util;
+package com.harshi_solution.auth.util;
+
 
 public enum ErrorMessageEnum {
 
@@ -20,3 +21,4 @@ public enum ErrorMessageEnum {
 		return customMessage;
 	}
 }
+

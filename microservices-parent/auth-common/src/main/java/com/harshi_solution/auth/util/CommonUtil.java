@@ -1,4 +1,5 @@
-package com.harshi_solution.warehouse.util;
+package com.harshi_solution.auth.util;
+
 
 import java.util.List;
 import java.util.UUID;
@@ -34,3 +35,4 @@ public class CommonUtil {
         return errorKey.substring(errorKey.lastIndexOf("_") + 1);
     }
 }
+

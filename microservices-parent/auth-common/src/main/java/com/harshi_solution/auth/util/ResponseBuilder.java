@@ -1,6 +1,7 @@
-package com.harshi_solution.warehouse.util;
+package com.harshi_solution.auth.util;
 
-import com.harshi_solution.warehouse.dto.BaseUIResponse;
+
+import com.harshi_solution.auth.dto.BaseUIResponse;
 
 public class ResponseBuilder {
 
@@ -14,7 +15,7 @@ public class ResponseBuilder {
         return response;
     }
 
-    public static <T> BaseUIResponse<T> error(
+    public static <T> BaseUIResponse<T> handleException(
             String code,
             String message,
             String extendedMessage) {
@@ -28,3 +29,4 @@ public class ResponseBuilder {
         return response;
     }
 }
+
