@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.harshi_solution.payment.dto.BaseUIResponse;
+import com.harshi_solution.auth.dto.BaseUIResponse;
 import com.harshi_solution.payment.dto.CreatePaymentRequest;
 import com.harshi_solution.payment.dto.DocumentResponseDTO;
 import com.harshi_solution.payment.dto.PaymentResponseDTO;
 import com.harshi_solution.payment.service.PaymentService;
-import com.harshi_solution.payment.util.ResponseBuilder;
+import com.harshi_solution.auth.util.ResponseBuilder;
 
 import jakarta.validation.Valid;
 
