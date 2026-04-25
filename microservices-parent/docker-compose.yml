@@ -93,6 +93,18 @@ services:
     networks:
       - inventorymate-net
 
+  audit-trail-service:
+    build: ./audit-trail
+    container_name: audit-trail-service
+    ports:
+      - "5009:5009"
+    depends_on:
+      - eureka-server
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+    networks:
+      - inventorymate-net
+
   frontend:   
     build: ../../inventorymate-frontend
     container_name: frontend
