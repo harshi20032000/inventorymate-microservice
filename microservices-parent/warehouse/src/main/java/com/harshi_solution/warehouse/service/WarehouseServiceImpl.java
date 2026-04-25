@@ -13,9 +13,8 @@ import com.harshi_solution.warehouse.dto.WarehouseRequestDTO;
 import com.harshi_solution.warehouse.dto.WarehouseResponseDTO;
 import com.harshi_solution.warehouse.entities.Warehouse;
 import com.harshi_solution.warehouse.exception.InsufficientStockException;
+import com.harshi_solution.warehouse.exception.WarehouseNotFoundException;
 import com.harshi_solution.warehouse.repo.WarehouseRepo;
-
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 @Transactional
@@ -52,7 +51,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     public WarehouseResponseDTO getWarehouseById(Long warehouseId) {
 
         Warehouse warehouse = warehouseRepository.findById(warehouseId)
-                .orElseThrow(() -> new RuntimeException("Warehouse not found"));
+                .orElseThrow(() -> new WarehouseNotFoundException(warehouseId));
 
         return mapToResponse(warehouse);
     }
@@ -63,7 +62,7 @@ public class WarehouseServiceImpl implements WarehouseService {
             WarehouseRequestDTO request) {
 
         Warehouse warehouse = warehouseRepository.findById(warehouseId)
-                .orElseThrow(() -> new RuntimeException("Warehouse not found"));
+                .orElseThrow(() -> new WarehouseNotFoundException(warehouseId));
 
         warehouse.setWareName(request.getWareName().toUpperCase());
         warehouse.setWareCode(request.getWareCode().toUpperCase());
@@ -77,7 +76,7 @@ public class WarehouseServiceImpl implements WarehouseService {
             Map<Long, Integer> productQuantities) {
 
         Warehouse warehouse = warehouseRepository.findById(warehouseId)
-                .orElseThrow(() -> new RuntimeException("Warehouse not found"));
+                .orElseThrow(() -> new WarehouseNotFoundException(warehouseId));
 
         warehouse.setProductQuantities(productQuantities);
 
@@ -157,7 +156,7 @@ public class WarehouseServiceImpl implements WarehouseService {
             Integer quantityToDeduct = entry.getValue();
 
             Warehouse warehouse = warehouseRepository.findById(warehouseId)
-                    .orElseThrow(() -> new EntityNotFoundException("Warehouse not found with id - " + warehouseId));
+                    .orElseThrow(() -> new WarehouseNotFoundException(warehouseId));
 
             Integer available = warehouse.getProductQuantities()
                     .getOrDefault(productId, 0);
