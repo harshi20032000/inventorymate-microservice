@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.harshi_solution.auth.util.CommonUtil;
 import com.harshi_solution.transport.dto.TransportRequestDTO;
 import com.harshi_solution.transport.dto.TransportResponseDTO;
 import com.harshi_solution.transport.dto.VehicleResponseDTO;
@@ -54,7 +55,8 @@ public class TransportServiceImpl implements TransportService {
 		transport.setCreatedAt(Instant.now());
 		transport.setUpdatedAt(Instant.now());
 
-		List<TransportAndBuiltNumber> vehicles = request.getVehicles()
+		if(!CommonUtil.isListNullOrEmpty(request.getVehicles())){
+			List<TransportAndBuiltNumber> vehicles = request.getVehicles()
 				.stream()
 				.map(vehicleDTO -> {
 					TransportAndBuiltNumber vehicle = new TransportAndBuiltNumber();
@@ -69,6 +71,7 @@ public class TransportServiceImpl implements TransportService {
 				.toList();
 
 		transport.setVehicles(vehicles);
+		}
 
 		Transport savedTransport = transportRepository.save(transport);
 
