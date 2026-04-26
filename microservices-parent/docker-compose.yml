@@ -1,125 +1,260 @@
 version: '3.8'
+
 services:
 
+  # ── Database ─────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: inventorymate-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: inventorymate
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+    volumes:
+      # persistent data — survives container restarts
+      - postgres_data:/var/lib/postgresql/data
+      # init scripts — run once on first startup
+      - ./db-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d inventorymate"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - inventorymate-net
+
+  mongodb:
+    image: mongo:7-jammy
+    container_name: inventorymate-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo123
+      MONGO_INITDB_DATABASE: audit_logs_db
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - inventorymate-net
+
+  # ── Infrastructure ────────────────────────────────────────
   eureka-server:
     build: ./eureka-server
     container_name: eureka-server
+    restart: unless-stopped
     ports:
       - "8761:8761"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - inventorymate-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  # ── Services ──────────────────────────────────────────────
+  user-service:
+    build: ./user
+    container_name: user-service
+    restart: unless-stopped
+    ports:
+      - "5007:5007"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/inventorymate?currentSchema=user
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres123
+      
     networks:
       - inventorymate-net
 
   order-service:
     build: ./order
     container_name: order-service
+    restart: unless-stopped
     ports:
       - "5001:5001"
     depends_on:
-      - eureka-server
+      postgres:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      SPRING_PROFILES_ACTIVE: docker
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/inventorymate?currentSchema=order
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres123
+      
     networks:
       - inventorymate-net
 
   party-service:
     build: ./party
     container_name: party-service
+    restart: unless-stopped
     ports:
       - "5002:5002"
     depends_on:
-      - eureka-server
+      postgres:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      SPRING_PROFILES_ACTIVE: docker
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/inventorymate?currentSchema=party
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres123
+      
     networks:
       - inventorymate-net
 
   payment-service:
     build: ./payment
     container_name: payment-service
+    restart: unless-stopped
     ports:
       - "5003:5003"
     depends_on:
-      - eureka-server
+      postgres:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      SPRING_PROFILES_ACTIVE: docker
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/inventorymate?currentSchema=payment
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres123
+      
     networks:
       - inventorymate-net
 
   product-service:
     build: ./product
     container_name: product-service
+    restart: unless-stopped
     ports:
       - "5004:5004"
     depends_on:
-      - eureka-server
+      postgres:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      SPRING_PROFILES_ACTIVE: docker
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/inventorymate?currentSchema=product
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres123
+      
     networks:
       - inventorymate-net
 
   transport-service:
     build: ./transport
     container_name: transport-service
+    restart: unless-stopped
     ports:
       - "5006:5006"
     depends_on:
-      - eureka-server
+      postgres:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
-    networks:
-      - inventorymate-net
-
-  user-service:
-    build: ./user
-    container_name: user-service
-    ports:
-      - "5007:5007"
-    depends_on:
-      - eureka-server
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      SPRING_PROFILES_ACTIVE: docker
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/inventorymate?currentSchema=transport
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres123
+      
     networks:
       - inventorymate-net
 
   warehouse-service:
     build: ./warehouse
     container_name: warehouse-service
+    restart: unless-stopped
     ports:
       - "5008:5008"
     depends_on:
-      - eureka-server
+      postgres:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      SPRING_PROFILES_ACTIVE: docker
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/inventorymate?currentSchema=warehouse
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres123
+      
     networks:
       - inventorymate-net
 
   audit-trail-service:
     build: ./audit-trail
     container_name: audit-trail-service
+    restart: unless-stopped
     ports:
       - "5009:5009"
     depends_on:
-      - eureka-server
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      SPRING_PROFILES_ACTIVE: docker
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/inventorymate?currentSchema=audit
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres123
+      SPRING_DATA_MONGODB_URI: mongodb://mongo:mongo123@mongodb:27017/audit_logs_db?authSource=admin
+      
     networks:
       - inventorymate-net
 
-  frontend:   
+  frontend:
     build: ../../inventorymate-frontend
     container_name: frontend
+    restart: unless-stopped
     ports:
       - "3000:80"
+    depends_on:
+      - user-service
     networks:
       - inventorymate-net
 
+# ── Volumes ───────────────────────────────────────────────
+volumes:
+  postgres_data:
+    driver: local
+  mongo_data:
+    driver: local
+
+# ── Networks ──────────────────────────────────────────────
 networks:
   inventorymate-net:
+    driver: bridge
