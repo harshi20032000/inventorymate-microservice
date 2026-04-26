@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS "user".user_register
     CONSTRAINT user_register_pkey PRIMARY KEY (id),
     CONSTRAINT ukagthxtxpihn020he0qlriosa3 UNIQUE (username),
     CONSTRAINT user_register_role_check CHECK (role::text = ANY (ARRAY['ROLE_ADMIN'::character varying, 'ROLE_REPS'::character varying, 'ROLE_VIEW'::character varying]::text[]))
-)
+);
 
 -- Insert admin user only if not already present
 -- Password is BCrypt encoded 'Password@123'

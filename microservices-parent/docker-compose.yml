@@ -8,7 +8,7 @@ services:
     container_name: inventorymate-postgres
     restart: unless-stopped
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       POSTGRES_DB: inventorymate
       POSTGRES_USER: postgres
@@ -20,26 +20,6 @@ services:
       - ./db-init:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d inventorymate"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - inventorymate-net
-
-  mongodb:
-    image: mongo:7-jammy
-    container_name: inventorymate-mongo
-    restart: unless-stopped
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: mongo
-      MONGO_INITDB_ROOT_PASSWORD: mongo123
-      MONGO_INITDB_DATABASE: audit_logs_db
-    volumes:
-      - mongo_data:/data/db
-    healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -221,8 +201,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      mongodb:
-        condition: service_healthy
       eureka-server:
         condition: service_healthy
     environment:
@@ -231,7 +209,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/inventorymate?currentSchema=audit
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres123
-      SPRING_DATA_MONGODB_URI: mongodb://mongo:mongo123@mongodb:27017/audit_logs_db?authSource=admin
+      SPRING_DATA_MONGODB_URI: mongodb+srv://harshibabu604:harshibabu604@cluster0.uayo1rp.mongodb.net/?appName=Cluster0/audit_logs_db?authSource=admin
       
     networks:
       - inventorymate-net
@@ -250,8 +228,6 @@ services:
 # ── Volumes ───────────────────────────────────────────────
 volumes:
   postgres_data:
-    driver: local
-  mongo_data:
     driver: local
 
 # ── Networks ──────────────────────────────────────────────
