@@ -2,6 +2,7 @@ package com.harshi_solution.audit_trail.config;
 
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
@@ -16,6 +17,12 @@ import com.mongodb.client.MongoClients;
 @EnableMongoRepositories(
     basePackages = "com.harshi_solution.audit_trail.mongo.repository"
 )
+@ConditionalOnProperty(
+    name    = "audit.mongodb.enabled",
+    havingValue = "true",
+    matchIfMissing = false 
+)
+
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
     @Value("${spring.data.mongodb.uri}")
