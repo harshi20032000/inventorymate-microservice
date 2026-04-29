@@ -3,6 +3,8 @@ package com.harshi_solution.auth.exception;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -33,6 +35,22 @@ public class GlobalExceptionHandler {
                 .orElse("Validation failed");
         log.warn("[400] Validation error | {}", detail);
         return ResponseBuilder.handleException("400", "Validation failed", detail);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public BaseUIResponse<Object> handleBadCredentials(BadCredentialsException ex) {
+        log.warn("[401] Bad credentials attempt");
+        return ResponseBuilder.handleException(
+                "401", "Invalid username or password", "Authentication failed");
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public BaseUIResponse<Object> handleUsernameNotFound(UsernameNotFoundException ex) {
+        log.warn("[401] Username not found: {}", ex.getMessage());
+        return ResponseBuilder.handleException(
+                "401", "Invalid username or password", "Authentication failed");
     }
 
     @ExceptionHandler(Exception.class)
