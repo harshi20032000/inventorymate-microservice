@@ -27,12 +27,12 @@ public class Warehouse {
 
     @Column(unique = true)
     @NotBlank(message = "wareName is mandatory")
-    @Length(min = 5, max = 15, message = "lastName should be min 5 and max 15")
+    @Length(min = 5, max = 25, message = "wareName should be min 5 and max 15")
     private String wareName;
 
     @Column(unique = true)
     @NotBlank(message = "wareCode is mandatory")
-    @Length(min = 3, max = 5, message = "wareCode should be min 3 and max 5")
+    @Length(min = 3, max = 8, message = "wareCode should be min 3 and max 5")
     private String wareCode;
 
     @ElementCollection

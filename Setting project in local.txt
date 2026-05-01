@@ -7,30 +7,34 @@ Follow these steps to setup app in your local:
 
 1. Install java 21, postgresql and vscode(or any ide of your choice), install postman/bruno for testing, git for version management.
 
-2. Clone the project using the link mentioned in github.
+2. Clone the project using the link mentioned in github.https://github.com/harshi20032000/inventorymate-microservice, https://github.com/harshi20032000/inventorymate-frontend
 
-3. In each of the services(e.g. order, party, payment, product, transport, user, warehouse) go to files - \src\main\resources\application.properties.
+3. For best experience use ssh, generate pub key and save it in github access key and then save remote origin for fetch and push in git bash.
 
-4. Update the username and password for datasource accordingly in application.properties.
+4. if you want to run in docker go through the docker-compose file once and use it. To run it in local follow steps 5 to 15.
 
-5. Change the property -spring.jpa.hibernate.ddl-auto is set from "validate" to "update"
+5. In each of the services(e.g. order, party, payment, product, transport, user, warehouse) go to files - \src\main\resources\application.properties.
 
-6. Start the services begining from eureka server first and then start each application one by one.
+6. Update the username and password for datasource accordingly in application.properties.
 
-7. hibernate.ddl-auto will make sure to create the respective schema and their table for each of the services.
+7. Change the property -spring.jpa.hibernate.ddl-auto is set from "validate" to "update"
 
-8. You can skip step 5, 6, 7 and manually create schemas and tables using createSchema.txt, createTables.txt and insert-statement.txt
+8. Start the services begining from eureka server first and then start each application one by one.
 
-9. After all application successfully starts open - http://localhost:8761/ to see all registered services.
+9. hibernate.ddl-auto will make sure to create the respective schema and their table for each of the services.
 
-10. Also open pgAdmin to check the schemas and tables created. After making sure the schema and tables are successfully created, change 
+10. You can skip step 5, 6, 7 and manually create schemas and tables using createSchema.txt, createTables.txt and insert-statement.txt
+
+11. After all application successfully starts open - http://localhost:8761/ to see all registered services.
+
+12. Also open pgAdmin to check the schemas and tables created. After making sure the schema and tables are successfully created, change 
   property -spring.jpa.hibernate.ddl-auto is set to "validate".
 
-11. Now run insert script to have basic data to test your services. 
+13. Now run insert script to have basic data to test your services. 
 
-12. Use services.postman_collection.json files to import collections into postman or bruno.
+14. Use services.postman_collection.json files to import collections into postman or bruno.
 
-13. Now start testing your application services by starting and testing with postman.
+15. Now start testing your application services by starting and testing with postman.
 
 Happy Coding!
   
