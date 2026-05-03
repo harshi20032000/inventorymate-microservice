@@ -19,7 +19,7 @@ import com.harshi_solution.auth.JWTAuthenticationProvider;
 import com.harshi_solution.auth.JWTUtil;
 import com.harshi_solution.auth.JWTValidationFilter;
 import com.harshi_solution.user.authenticationEntryPoint.CustomAccessDeniedHandler;
-import com.harshi_solution.user.authenticationEntryPoint.CustomAuthenticationEntryPoint;
+import com.harshi_solution.auth.CustomAuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity

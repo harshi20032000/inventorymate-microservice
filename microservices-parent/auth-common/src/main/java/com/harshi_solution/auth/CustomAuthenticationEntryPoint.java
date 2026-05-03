@@ -1,4 +1,5 @@
-package com.harshi_solution.user.authenticationEntryPoint;
+package com.harshi_solution.auth;
+
 
 import java.io.IOException;
 
@@ -35,3 +36,4 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint{
     }
 
 }
+

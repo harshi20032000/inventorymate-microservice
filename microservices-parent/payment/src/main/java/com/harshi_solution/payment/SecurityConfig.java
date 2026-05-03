@@ -12,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.harshi_solution.auth.CustomAuthenticationEntryPoint;
 import com.harshi_solution.auth.JWTAuthenticationProvider;
 import com.harshi_solution.auth.JWTUtil;
 import com.harshi_solution.auth.JWTValidationFilter;
@@ -22,9 +23,12 @@ public class SecurityConfig {
 
         private final JWTUtil jwtUtil;
 
-        public SecurityConfig(JWTUtil jwtUtil) {
-                this.jwtUtil = jwtUtil;
-        }
+         private final CustomAuthenticationEntryPoint authEntryPoint;
+
+    public SecurityConfig(JWTUtil jwtUtil, CustomAuthenticationEntryPoint authEntryPoint) {
+        this.jwtUtil = jwtUtil;
+        this.authEntryPoint = authEntryPoint;
+    }
 
         @Bean
         public JWTAuthenticationProvider jwtAuthenticationProvider() {
@@ -55,6 +59,7 @@ public class SecurityConfig {
                                                 .requestMatchers("/api/v1/payments/public/**").permitAll()
                                                 .requestMatchers("/api/v1/payments/admin/**").hasRole("ADMIN")
                                                 .anyRequest().authenticated())
+                                                .exceptionHandling(ex->ex.authenticationEntryPoint(authEntryPoint))
                                 .addFilterBefore(jwtValidationFilter,
                                                 UsernamePasswordAuthenticationFilter.class);
 
