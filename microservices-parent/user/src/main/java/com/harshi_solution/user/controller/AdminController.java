@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.harshi_solution.auth.dto.BaseUIResponse;
+import com.harshi_solution.auth.util.ResponseBuilder;
 import com.harshi_solution.user.dto.RegisterRepsRequest;
-import com.harshi_solution.user.dto.RegisterViewerRequest;
+import com.harshi_solution.user.dto.RegisterRequest;
 import com.harshi_solution.user.dto.UserResponseDTO;
 import com.harshi_solution.user.entities.Role;
 import com.harshi_solution.user.service.UserRegisterEntityService;
@@ -43,7 +44,7 @@ public class AdminController {
 
     @PostMapping("/register-viewer")
     public BaseUIResponse<String> registerViewer(
-            @Valid @RequestBody RegisterViewerRequest request) {
+            @Valid @RequestBody RegisterRequest request) {
 
         userRegisterEntityService.registerViewer(request);
 
@@ -52,6 +53,13 @@ public class AdminController {
 
         return response;
     }
+
+    @PostMapping("/register-warehouse")
+public BaseUIResponse<String> registerWarehouse(
+        @RequestBody RegisterRequest request) {
+    userRegisterEntityService.registerWarehouse(request);
+    return ResponseBuilder.success("Warehouse manager registered successfully", null);
+}
 
     @GetMapping("/users")
     public BaseUIResponse<List<UserResponseDTO>> getUsersByRole(

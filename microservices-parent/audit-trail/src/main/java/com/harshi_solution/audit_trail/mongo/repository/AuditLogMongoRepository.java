@@ -1,6 +1,6 @@
 package com.harshi_solution.audit_trail.mongo.repository;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.domain.Page;
@@ -25,7 +25,7 @@ public interface AuditLogMongoRepository
             String role, Pageable pageable);
 
     Page<AuditLogDocument> findByTimestampBetweenOrderByTimestampDesc(
-            Instant from, Instant to, Pageable pageable);
+            LocalDateTime from, LocalDateTime to, Pageable pageable);
 
     Page<AuditLogDocument> findByIsErrorTrueOrderByTimestampDesc(
             Pageable pageable);
@@ -34,5 +34,5 @@ public interface AuditLogMongoRepository
             String username, String serviceName, Pageable pageable);
 
     long countByUsernameAndTimestampBetween(
-            String username, Instant from, Instant to);
+            String username, LocalDateTime from, LocalDateTime to);
 }

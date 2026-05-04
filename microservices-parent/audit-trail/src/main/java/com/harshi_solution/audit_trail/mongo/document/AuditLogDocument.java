@@ -1,7 +1,7 @@
 package com.harshi_solution.audit_trail.mongo.document;
 
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -28,7 +28,7 @@ public class AuditLogDocument {
     private Long    durationMs;
 
     @Indexed(expireAfterSeconds = 7776000) // TTL — auto-delete after 90 days
-    private Instant timestamp;
+    private LocalDateTime timestamp;
 
     private String  userAgent;
     private boolean isError;     // true if responseStatus >= 400
@@ -49,8 +49,8 @@ public class AuditLogDocument {
     public void    setResponseStatus(Integer rs) { this.responseStatus = rs; }
     public Long    getDurationMs()           { return durationMs; }
     public void    setDurationMs(Long d)     { this.durationMs = d; }
-    public Instant getTimestamp()            { return timestamp; }
-    public void    setTimestamp(Instant t)   { this.timestamp = t; }
+    public LocalDateTime getTimestamp()            { return timestamp; }
+    public void    setTimestamp(LocalDateTime t)   { this.timestamp = t; }
     public String  getUserAgent()            { return userAgent; }
     public void    setUserAgent(String ua)   { this.userAgent = ua; }
     public boolean isError()                 { return isError; }

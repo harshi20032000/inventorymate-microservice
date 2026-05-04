@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.harshi_solution.user.dto.RegisterRepsRequest;
-import com.harshi_solution.user.dto.RegisterViewerRequest;
+import com.harshi_solution.user.dto.RegisterRequest;
 import com.harshi_solution.user.dto.UserResponseDTO;
 import com.harshi_solution.user.entities.Reps;
 import com.harshi_solution.user.entities.Role;
@@ -62,7 +62,7 @@ public class UserRegisterEntityService implements UserDetailsService {
         repsRepository.save(reps);
     }
 
-    public void registerViewer(RegisterViewerRequest request) {
+    public void registerViewer(RegisterRequest request) {
 
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("Username already exists");
@@ -72,6 +72,20 @@ public class UserRegisterEntityService implements UserDetailsService {
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(Role.ROLE_VIEW);
+
+        userRepository.save(user);
+    }
+
+      public void registerWarehouse(RegisterRequest request) {
+
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new RuntimeException("Username already exists");
+        }
+
+        UserRegisterEntity user = new UserRegisterEntity();
+        user.setUsername(request.getUsername());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole(Role.ROLE_WAREHOUSE);
 
         userRepository.save(user);
     }

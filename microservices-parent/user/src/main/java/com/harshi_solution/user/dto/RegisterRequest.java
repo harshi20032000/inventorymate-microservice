@@ -2,7 +2,7 @@ package com.harshi_solution.user.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class RegisterViewerRequest {
+public class RegisterRequest {
     @NotBlank
     private String username;
 
