@@ -15,6 +15,6 @@ public class AuditClientFallback implements AuditClient {
         // audit-trail service is down — log locally and move on
         // never throw — never affect the actual service request
         log.warn("AuditClientFallback: audit-trail unreachable, dropping event for {} {}",
-            event.getUsername(), event.getEndpoint());
+            event.getUsername(), event.getUrl());
     }
 }
