@@ -15,6 +15,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
+import com.harshi_solution.auth.JWTUtil;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -40,10 +42,13 @@ public class AuditFilter extends OncePerRequestFilter {
     @Value("${spring.application.name:unknown}")
     private String serviceName;
 
+    private JWTUtil jwtUtil;
+
     private final AuditClient auditClient;
 
-    public AuditFilter(AuditClient auditClient) {
+    public AuditFilter(AuditClient auditClient, JWTUtil jwtUtil) {
         this.auditClient = auditClient;
+        this.jwtUtil=jwtUtil;
     }
 
     @Override
@@ -75,6 +80,9 @@ public class AuditFilter extends OncePerRequestFilter {
 
         // set correlation ID on response so downstream can read it
         wrappedResponse.setHeader(CORRELATION_HEADER, correlationId);
+        if (businessCorrelationId != null) {
+            wrappedResponse.setHeader(BUSINESS_CORRELATION_HEADER, businessCorrelationId);
+        }
 
         try {
             chain.doFilter(wrappedRequest, wrappedResponse);
@@ -87,11 +95,7 @@ public class AuditFilter extends OncePerRequestFilter {
             String authHeader = request.getHeader("Authorization");
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
                 try {
-                    Claims claims = Jwts.parser()
-                    .verifyWith(key)
-                    .build()
-                    .parseSignedClaims(authHeader)
-                    .getPayload();
+                    Claims claims = jwtUtil.extractClaim(authHeader.substring(7));
                     username = claims.getSubject();
                     role     = claims.get("role", String.class);
                 } catch (Exception ignored) {}
