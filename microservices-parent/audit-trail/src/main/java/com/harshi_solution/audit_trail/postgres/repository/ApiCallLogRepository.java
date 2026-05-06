@@ -29,7 +29,7 @@ public interface ApiCallLogRepository
                         LocalDateTime to,
                         Pageable pageable);
 
-        Page<ApiCallLog> findByRoleOrderByTimestampDesc(
+        Page<ApiCallLog> findByRoleOrderByLogTimeDesc(
                         String role,
                         Pageable pageable);
 

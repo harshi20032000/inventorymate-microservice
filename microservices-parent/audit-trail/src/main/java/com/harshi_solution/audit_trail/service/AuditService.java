@@ -144,7 +144,7 @@ public class AuditService {
     }
 
     public Page<ApiCallLog> getByRole(String role, int page, int size) {
-        return pgRepo.findByRoleOrderByTimestampDesc(
+        return pgRepo.findByRoleOrderByLogTimeDesc(
                 role, PageRequest.of(page, size));
     }
 
