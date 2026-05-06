@@ -143,8 +143,22 @@ public class AuditService {
                 PageRequest.of(page, size));
     }
 
-    public Page<AuditLogDocument> getByRole(String role, int page, int size) {
-        return mongoRepo.findByRoleOrderByTimestampDesc(
+    public Page<ApiCallLog> getByRole(String role, int page, int size) {
+        return pgRepo.findByRoleOrderByTimestampDesc(
                 role, PageRequest.of(page, size));
+    }
+
+    public Page<ApiCallLog> getByBusinessCorrelationId(String businessCorrelationId,
+            int page,
+            int size) {
+        return pgRepo.findByBusinessCorrelationId(businessCorrelationId,
+                PageRequest.of(page, size));
+    }
+
+    public Page<ApiCallLog> getByBoundType(String boundT,
+            int page,
+            int size) {
+        return pgRepo.findByBoundType(boundT,
+                PageRequest.of(page, size));
     }
 }

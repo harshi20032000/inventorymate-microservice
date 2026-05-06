@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.harshi_solution.audit_trail.dto.AuditEventDTO;
-import com.harshi_solution.audit_trail.mongo.document.AuditLogDocument;
 import com.harshi_solution.audit_trail.postgres.entity.ApiCallLog;
 import com.harshi_solution.audit_trail.service.AuditService;
 import com.harshi_solution.auth.dto.BaseUIResponse;
@@ -63,7 +62,7 @@ public class AuditController {
     }
 
     @GetMapping("/logs/role/{role}")
-    public BaseUIResponse<Page<AuditLogDocument>> getByRole(
+    public BaseUIResponse<Page<ApiCallLog>> getByRole(
             @PathVariable String role,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "50") int size) {
@@ -87,5 +86,23 @@ public class AuditController {
             @RequestParam(defaultValue = "50") int size) {
         return ResponseBuilder.success("Logs fetched",
                 auditService.getByDateRange(from, to, page, size));
+    }
+
+    @GetMapping("/logs/businessCorrelationId/{businessCorrelationId}")
+    public BaseUIResponse<Page<ApiCallLog>> getByBusinessCorrelationId(
+            @PathVariable String businessCorrelationId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "50") int size) {
+        return ResponseBuilder.success("Logs fetched",
+                auditService.getByBusinessCorrelationId(businessCorrelationId, page, size));
+    }
+
+    @GetMapping("/logs/bound/{boundType}")
+    public BaseUIResponse<Page<ApiCallLog>> getByBoundType(
+            @PathVariable String boundType,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "50") int size) {
+        return ResponseBuilder.success("Logs fetched",
+                auditService.getByBoundType(boundType, page, size));
     }
 }
