@@ -1,0 +1,33 @@
+Order reaches FULLY_PAID
+        │
+        ▼
+OrderService.addPayment() detects FULLY_PAID
+        │
+        ▼
+DeliveryNoteService.createDeliveryNotesForOrder()
+  → creates one DeliveryNote per (wareId + productId) allocation
+  → all start as PENDING
+  → stored in PostgreSQL order schema
+
+Warehouse manager opens Dispatch page
+        │
+        ▼
+Frontend loads delivery notes from GET /warehouses/{id}/delivery-notes
+        │
+        ▼
+For each product line: shows PENDING → "Dispatch" button
+Manager clicks Dispatch
+        │
+        ▼
+POST /delivery-notes/{noteId}/dispatch
+  → sets status = DISPATCHED, dispatchedBy = username, dispatchedAt = now
+  → checks if all notes for this order are dispatched
+  → if yes: order moves to FULLY_DISPATCHED
+  → if some still pending: order moves to PARTIALLY_DISPATCHED
+
+Customer receives goods, admin/manager clicks Deliver
+        │
+        ▼
+POST /delivery-notes/{noteId}/deliver
+  → sets status = DELIVERED, deliveredBy = username, deliveredAt = now
+  → all notes delivered → order stays FULLY_DISPATCHED (or add COMPLETED)
