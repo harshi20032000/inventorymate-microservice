@@ -38,3 +38,462 @@ Happy Coding!
 
 Later use font - frutiger
 
+
+InventoryMate — Complete Project Reference Prompt
+Project overview
+InventoryMate is a full-stack B2B inventory management and billing application built for import/export and distribution businesses. A business imports goods (e.g. from China), stores them across multiple warehouses in India, takes large bulk orders from retailers and showrooms, tracks payments, and generates warehouse-wise dispatch sheets. The system is built as a React web app consuming a Spring Boot microservices backend, with a Flutter multiplatform app planned as the next phase.
+
+Business domain
+The business model is an importer-distributor. Goods arrive from overseas suppliers and are stocked across multiple physical warehouses. Sales representatives go to client businesses (parties) and book orders. Orders go through a lifecycle from creation through confirmation and payment collection. Once fully paid, dispatch sheets are generated per warehouse showing which products need to be pulled and shipped.
+
+Backend — Spring Boot microservices
+Technology stack
+Java 21, Spring Boot 3.3.5, Spring Cloud 2023.0.3
+Spring Security with stateless JWT authentication
+Spring Data JPA with Hibernate (PostgreSQL per schema)
+Spring Cloud Netflix Eureka for service discovery
+Spring Cloud OpenFeign for inter-service HTTP calls
+Maven multi-module project with a parent POM
+Docker and Docker Compose for containerisation
+Parent POM
+GroupId: com.harshi_solution
+ArtifactId: microservices-parent
+All child services inherit from this
+Shared library — auth-common
+Every service depends on auth-common as a JAR. It provides:
+
+dto/BaseUIResponse<T> — universal API response wrapper
+util/ResponseBuilder — static factory for success and error responses
+util/Constants — STATUS_SUCCESS, STATUS_ERROR, STATUS_SUCCESS_CODE
+exception/BaseException — parent for all custom exceptions, carries code and shortMessage
+exception/NotFoundException, BadRequestException, UnauthorizedException — common typed exceptions
+exception/GlobalExceptionHandler — @RestControllerAdvice catching BaseException, BadCredentialsException, UsernameNotFoundException, DisabledException, LockedException, MethodArgumentNotValidException, and generic Exception. Short message in response, full stack trace in console only
+security/CustomAuthenticationEntryPoint — registered in every service's SecurityFilterChain via .exceptionHandling(ex -> ex.authenticationEntryPoint(...)). Always returns 401 for expired or invalid JWT — critical fix because without this Spring Security defaults to 403 which the frontend interceptor ignores
+audit/AuditFilter — OncePerRequestFilter that decodes JWT, measures request duration, and fires a virtual thread POST to the audit-trail service via Feign
+audit/AuditClient — Feign interface targeting audit-trail service resolved via Eureka (no hardcoded URL)
+audit/AuditClientFallback — if audit-trail is down, silently logs and continues. Never breaks the actual request
+audit/AuditEventDTO — payload posted to audit-trail
+config/AuthCommonAutoConfiguration — Spring Boot autoconfiguration class, scanned via META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports so every service picks up all beans automatically
+Services and ports
+Service	Port	Schema	Notes
+eureka-server	8761	—	Service registry, start first
+user	5007	user	Auth, reps, admin user management
+order	5001	order	Full order lifecycle
+party	5002	party	Business clients
+payment	5003	payment	Payments + document uploads
+product	5004	product	Product catalog
+transport	5006	transport	Transport companies + vehicles
+warehouse	5008	warehouse	Stock management
+audit-trail	5009	audit (PG) + MongoDB	Dual-DB audit logging
+Universal API response shape
+Every endpoint returns:
+
+{
+  "code": "0",
+  "message": "...",
+  "extendedMessage": null,
+  "status": "SUCCESS",
+  "hasError": false,
+  "responsePayload": <data>
+}
+On error: code is HTTP status as string, status is "ERROR", hasError is true, responsePayload is null. Extract payload with: const payload = res.data.responsePayload ?? res.data; return Array.isArray(payload) ? payload : payload.content ?? []
+
+JWT structure
+Algorithm: HS256
+Claims: sub (username), role (e.g. ROLE_ADMIN), type (access/refresh), iat, exp
+Access token expires in 15 minutes
+Refresh token used to get new access token
+All protected endpoints require Authorization: Bearer <accessToken>
+Roles
+ROLE_ADMIN — full access to everything
+ROLE_REPS — can create orders, add line items, confirm orders, add payments, see only their own orders matched by repId
+ROLE_VIEWER — read-only, can view dispatch sheets, warehouse stock, products, transport
+User service endpoints (localhost:5007/api/v1)
+POST /user/login — { username, password } → { accessToken, refreshToken }
+POST /user/refresh-token — { refreshToken } → { accessToken, refreshToken }
+POST /user/change-password — { oldPassword, newPassword } (Bearer required)
+GET /reps — list all reps
+PATCH /reps/{id} — update rep
+DELETE /reps/{id} — delete rep
+GET /admin/users?role=ROLE_REPS — list users by role
+POST /admin/register-reps — { repName, repLocation, username, password }
+POST /admin/register-viewer — { username, password }
+DELETE /admin/users/{id} — delete viewer only
+Order service endpoints (localhost:5001/api/v1)
+GET /orders — all orders
+GET /orders/{id} — single order
+POST /orders — { repId } → creates order in CREATED status
+POST /orders/{id}/line-items — { productId, quantity, rate }
+POST /orders/{id}/confirm — no body, moves to CONFIRMED
+POST /orders/{id}/payments — { payAmount, payMode, payType, paymentConfirmationDate }
+Order response includes: orderId, orderDate, repId, partyId, transportId, totalOrderQuantity, totalBillAmount, remainingBillAmount, currentStatus, orderLineItems[], statusHistory[]
+
+Line item: { id, productId, quantity, rate, warehouseQuantities: { "wareId": qty } }
+
+Order statuses: CREATED → CONFIRMED → PARTIALLY_PAID → FULLY_PAID
+
+Party service endpoints (localhost:5002/api/v1)
+GET /parties — all parties
+POST /parties — { partyName, partyLocation, phoneNo }
+PUT /parties/{id} — update
+DELETE /parties/{id} — delete
+Payment service endpoints (localhost:5003/api/v1)
+GET /payments — all payments
+GET /payments/{id} — single payment
+GET /payments/order/{orderId} — payments for an order
+POST /payments — { orderId, payAmount, payMode, payType }
+DELETE /payments/{id} — delete payment
+GET /payments/{id}/documents — list documents for a payment
+POST /payments/{id}/documents — multipart file upload
+GET /payments/documents/{docId}/download — download document
+Payment response: { payId, paymentConfirmationDate, paymentUpdatedDate, payAmount, payMode, payType, orderId, documents[] }
+
+Document response: { docId, name, documentUpdatedDate }
+
+Pay modes: CASH, UPI, CHEQUE, NEFT, RTGS, OTHER Pay types: FULL, PARTIAL, ADVANCE
+
+Product service endpoints (localhost:5004/api/v1)
+GET /products — all products
+POST /products — { productName, productCode, basePrice, pType }
+PUT /products/{id} — update
+DELETE /products/{id} — delete
+Product types (enum): FURNITURE, ELECTRONICS, CLOTHING, FOOD, STATIONERY, OTHER
+
+Transport service endpoints (localhost:5006/api/v1)
+GET /transports — paginated list, extract via payload.content
+POST /transports — { transportName, contactDetails, vehicles: [{ builtNumber, driverName, driverContact }] }
+PUT /transports/{id} — update
+DELETE /transports/{id} — delete
+Warehouse service endpoints (localhost:5008/api/v1)
+GET /warehouses — all warehouses
+GET /warehouses/{id} — single warehouse
+POST /warehouses — { wareName, wareCode, wareLocation }
+PUT /warehouses/{id} — update
+PATCH /warehouses/{id}/products — body is { "productId": quantity } map
+DELETE /warehouses/{id} — delete
+Warehouse response includes productQuantities: { "productId": quantity }
+
+Audit-trail service (localhost:5009/api/v1)
+Dual database — PostgreSQL for daily summaries, MongoDB for raw logs.
+
+POST /audit/record — called by AuditFilter in every service
+GET /audit/logs — all raw logs from MongoDB (paginated)
+GET /audit/logs/user/{username} — logs for a user
+GET /audit/logs/service/{service} — logs for a service
+GET /audit/logs/role/{role} — logs by role
+GET /audit/logs/errors — only error responses
+GET /audit/logs/range?from=&to= — date range query
+GET /audit/summary/user/{username} — daily summary from PostgreSQL
+GET /audit/summary/activity?from=&to= — user activity leaderboard
+GET /audit/summary/services?date= — service activity for a day
+MongoDB flag: audit.mongodb.enabled=true/false in application.properties. When false, MongoDisabledConfig activates and excludes MongoAutoConfiguration and MongoDataAutoConfiguration so Spring never attempts a MongoDB connection. Raw logs are skipped but PostgreSQL summaries always write.
+
+Database setup
+Single PostgreSQL instance, one schema per service. Init scripts run automatically via Docker docker-entrypoint-initdb.d:
+
+01-create-schemas.sql — creates all schemas
+03-seed-admin-user.sql — inserts default admin with BCrypt password, ON CONFLICT DO NOTHING
+Each service connects via JDBC URL: jdbc:postgresql://postgres:5432/inventorymate?currentSchema={service}
+
+Docker Compose uses condition: service_healthy with PostgreSQL healthcheck before starting any service. Services use application-docker.properties profile activated by SPRING_PROFILES_ACTIVE=docker.
+
+Frontend — React web app
+Technology stack
+Vite + React 18
+Tailwind CSS v4 with custom dark mode variant
+Redux Toolkit for global state
+Axios for HTTP with per-service instances
+React Router v6 for navigation
+SheetJS (xlsx) for Excel import and export
+createPortal for dropdowns that escape scroll containers
+index.css configuration
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+html { background-color: #f3f4f6; transition: background-color 0.2s; }
+html.dark { background-color: #030712; }
+Dark mode is toggled by adding/removing .dark class on document.documentElement. Stored in localStorage. Default is light mode.
+
+Brand colors
+Accent orange: #e07b39 (light) / #f0904a (dark)
+CSS variables --accent and --accent-hover defined in index.css
+API configuration
+All service base URLs live in src/config/apiConfig.js:
+
+export const API_CONFIG = {
+  USER:      'http://localhost:5007/api/v1',
+  ORDER:     'http://localhost:5001/api/v1',
+  PARTY:     'http://localhost:5002/api/v1',
+  PAYMENT:   'http://localhost:5003/api/v1',
+  PRODUCT:   'http://localhost:5004/api/v1',
+  TRANSPORT: 'http://localhost:5006/api/v1',
+  WAREHOUSE: 'http://localhost:5008/api/v1',
+}
+Axios instance pattern
+axiosInstance.js uses a shared queue-based 401/403 interceptor:
+
+Attaches Bearer token to every request
+On 401 or 403 response: if refresh not in progress, calls refresh-token, updates Redux, retries original request
+If refresh already in progress: queues the request and resolves when refresh completes (prevents duplicate refresh calls)
+On refresh failure: dispatches logout()
+Each other API file imports the shared instance and sets its own base URL per request using API_CONFIG
+Redux store slices
+Each slice follows { list: [], loading: false, error: null }:
+
+authSlice — accessToken, refreshToken, username, role (decoded from JWT on login/refresh)
+repsSlice — reps list
+usersSlice — users list with role filter
+partySlice — parties list
+productSlice — products list
+transportSlice — transports list (paginated)
+warehouseSlice — warehouses list
+orderSlice — orders list with workflow thunks (create, addLineItem, confirm, addPayment)
+paymentSlice — payments list + orderPayments sublist
+Pages and routes
+Route	Page	Roles
+/login	LoginPage	Public
+/dashboard	DashboardPage	All
+/reps	RepsPage	ADMIN, REPS
+/admin/users	UsersPage	ADMIN only
+/orders	OrdersPage	ADMIN, REPS
+/outstanding	PaymentPage	ADMIN only
+/products	ProductsPage	ADMIN, VIEWER
+/parties	PartiesPage	ADMIN, REPS
+/transport	TransportPage	ADMIN, VIEWER
+/warehouses	WarehousePage	ADMIN, VIEWER
+/dispatch	DispatchPage	VIEWER, ADMIN
+ProtectedRoute accepts allowedRoles[] — redirects to /dashboard if role not allowed.
+
+Page layout pattern (every page)
+min-h-screen bg-gray-100 dark:bg-gray-950
+  Navbar
+  Toast (fixed top-right, 3 second auto-dismiss)
+  main (max-w-5xl mx-auto px-4 py-8)
+    Page header row (home button + title + count badge + primary action button)
+    Summary cards (2-4 stat cards)
+    Filter/search bar
+    Error banner
+    Table card (rounded-xl border shadow-sm)
+  Modals
+  Drawers
+  Footer
+Screen-by-screen breakdown
+LoginPage
+
+Centered card with InventoryMate logo and tagline
+Username and password inputs with show/hide toggle
+Error message for wrong credentials (401 from API)
+On success: decodes JWT, stores role in Redux, navigates to /dashboard
+DashboardPage
+
+Grid of module cards filtered by role
+Admin sees all modules
+Rep sees: Book Order, Order List, Parties List
+Viewer sees: Products List, Warehouse List, Transport List, Dispatch Sheet
+Dark mode toggle in Navbar
+RepsPage
+
+Table: rep name, location, username, role badge
+Inline edit modal: repName, repLocation
+Delete with confirmation dialog
+UsersPage (admin only)
+
+Role filter tabs: All / Admin / Reps / Viewer
+Add Viewer modal: username + password
+Delete button only shown for ROLE_VIEWER rows (not admin or reps)
+Confirmation dialog before delete
+OrdersPage
+
+Status filter tabs: All / Created / Confirmed / Partial / Fully Paid
+Search by order ID or rep ID
+Summary cards: order count, total bill, collected, outstanding
+Rep sees only their own orders (filtered by matching username → repId from reps list)
+Row click → detail drawer
+Inline action buttons per row: Confirm (CREATED status), Pay (CONFIRMED/PARTIALLY_PAID)
+CreateOrderModal: just repId input
+AddLineItemModal: product code search dropdown (portal-based, not clipped by scroll), auto-fills rate from basePrice on selection, quantity + rate inputs, live line total preview, selected product confirmation pill with clear button
+AddOrderPaymentModal: amount, payMode select, payType select, optional confirmation date, shows remaining amount
+OrderDetailDrawer: financial summary strip (total/paid/remaining), meta row (rep, party, transport, qty), state-aware action buttons, line items with warehouse allocation pills, reversed status history timeline
+PaymentPage
+
+Order ID lookup bar → calls GET /payments/order/{orderId}, shows blue filter banner
+General search by order ID / mode / type
+Summary cards: total amount, payment count, view mode
+Docs button per row → opens PaymentDocumentsDrawer
+Delete with confirmation
+Total footer row
+PaymentModal: orderId, amount, payMode, payType
+PaymentDocumentsDrawer: payment summary strip, upload area (dashed border, multipart POST), document list with file type badge (PDF/IMG/XLS/DOC), file name, updated date
+ProductsPage
+
+Search by name or code
+Add/Edit modal: productName, productCode, basePrice, pType select
+Row click → detail drawer showing which warehouses stock it (cross-references warehouse Redux state, no extra API call)
+Import Excel button → ExcelImportModal
+Delete with confirmation
+PartiesPage
+
+Search by name or location
+Add/Edit modal: partyName, partyLocation, phoneNo
+Import Excel button → ExcelImportModal
+Delete with confirmation
+TransportPage
+
+Expandable rows → shows vehicles inline (builtNumber, driverName, driverContact)
+Add/Edit via TransportModal which embeds VehicleFields
+VehicleFields: styled vehicle cards with built number (full width) + driver name/contact (side by side), remove button per vehicle
+Modal header has: Template download (blue), Import Excel (accent), Add vehicle buttons
+Import Excel appends parsed vehicles to existing list
+Delete with confirmation
+WarehousePage
+
+Row click → WarehouseDetailDrawer showing all products with quantities, out-of-stock (red) and low stock ≤20 (amber) badges, total units
+Update Stock button → StockModal
+StockModal: product code search dropdown using createPortal (escapes scroll container), shows productId + productName in green pill on selection, quantity input, Template/Import Excel/Add buttons, merges imported rows with existing
+Import Excel resolves productCode → productId using Redux product list, wareId removed (modal already knows warehouse context)
+Add/Edit warehouse modal: wareName, wareCode, wareLocation
+Bulk stock Excel import button
+DispatchPage (viewer + admin)
+
+Only shows FULLY_PAID orders
+Filter by warehouse dropdown
+One table per warehouse, each with warehouse header strip (name, code, line count, total value)
+Columns: Order, Date, Rep, Product Code, Product Name, Qty, Rate, Total
+Warehouse total footer row
+Grand summary cards: total rows, total units, total value, warehouse count
+Print/Save PDF button (window.print() with print: Tailwind classes stripping nav/buttons)
+Export Excel button — generates multi-sheet workbook, one sheet per warehouse, with merged title header
+Components
+Navbar
+
+InventoryMate logo + name
+Dark mode toggle button
+Change Password modal (accessible from all protected pages)
+Sign Out button
+ProtectedRoute
+
+Checks accessToken in Redux
+Checks allowedRoles prop if provided
+Redirects to /login or /dashboard accordingly
+ExcelImportModal (reusable)
+
+3-step flow: Upload → Preview → Done
+Step indicator with numbered badges
+Download template button (blue, downloads blank xlsx)
+Dashed border upload area
+Preview table: row number, status badge (green valid / red error), all data columns, error messages column
+Invalid rows highlighted red, skipped on submit
+Submit button shows count: "Import N rows"
+Result screen: success/partial/fail with counts
+AutoLogoutWrapper
+
+Wraps entire app
+useAutoLogout hook: 15-minute inactivity timer reset by mousedown/mousemove/keydown/scroll/touchstart/click events
+Warning toast appears 2 minutes before logout (bottom center, amber)
+Stay Logged In button: calls refresh-token, resets timer, dismisses toast
+Logout Now button in toast
+useTokenRefresh hook: reads JWT exp claim, schedules proactive refresh 2 minutes before expiry using setTimeout
+Hooks
+useRole() — returns { role, isAdmin, isRep, isViewer } from Redux auth state
+useAutoLogout({ onWarning, onLogout }) — inactivity timer
+useTokenRefresh() — proactive JWT refresh before expiry
+Excel import/export utilities
+src/utils/excelTemplates.js
+
+downloadOrderTemplate() — wareId removed, simple template
+downloadProductTemplate() — productName, productCode, basePrice, pType
+downloadPartyTemplate() — partyName, partyLocation, phoneNo
+downloadTransportTemplate() — transportName, contactDetails, builtNumber, driverName, driverContact
+downloadWarehouseStockTemplate() — productCode, quantity (wareId removed)
+downloadVehicleTemplate() — builtNumber, driverName, driverContact
+downloadDispatchExcel() — multi-sheet, one per warehouse, merged title rows
+src/utils/excelParser.js
+
+parseProductExcel(file) — validates pType against enum
+parsePartyExcel(file) — validates 10-digit phone
+parseTransportExcel(file) — each row creates one transport with one vehicle
+parseWarehouseStockExcel(file, productList) — resolves productCode → productId using Redux product list (case-insensitive), wareId removed
+parseVehiclesExcel(file) — builtNumber, driverName, driverContact
+src/utils/dispatchGenerator.js
+
+buildDispatchData(orders, warehouses, products) — flattens order line items × warehouse quantities into rows, groups by wareId
+downloadDispatchExcel(orders, warehouses, products) — writes xlsx with one sheet per warehouse
+Known patterns and gotchas
+Never import store at module level in API files — use require('../store') inside interceptors to avoid circular imports. (Note: axiosInstance.js uses direct store import since it avoids the circular dependency issue there)
+Never use useEffect to initialise modal form state — use lazy useState(() => EMPTY_FORM)
+Always guard list state: s.list = Array.isArray(a.payload) ? a.payload : []
+createPortal for dropdowns in scroll-constrained modals — attach to document.body, use onMouseDown with e.preventDefault() to prevent blur before selection
+e.stopPropagation() on action buttons inside clickable table rows
+Transport responses are paginated — extract via payload.content
+Warehouse PATCH /products returns 403 (not 401) for expired tokens without CustomAuthenticationEntryPoint — fixed by registering it in every service's SecurityConfig
+axiosInstance catches both 401 and 403 as a safety net
+Selenium test suite
+tests/test_inventorymate_demo.py with 9 test classes covering the full user journey:
+
+Login (wrong password error, correct login redirect)
+Dashboard (all modules visible, dark mode toggle)
+Products (table loads, add product, search)
+Parties (add party)
+Reps (view list, add rep)
+Warehouse (list loads, drawer opens)
+Orders (full lifecycle: create → line item → confirm → payment)
+Change password (change, login with new, revert back)
+Sign out (verify protected routes redirect)
+Uses session-scoped driver fixture so login state carries across all tests. Screenshots saved at every step to screenshots/ folder.
+
+Docker and infrastructure
+Dockerfile pattern (every service)
+FROM maven:3.9.6-eclipse-temurin-21 AS build
+WORKDIR /app
+COPY pom.xml ./pom.xml
+RUN mvn install -N -q
+COPY auth-common/pom.xml ./auth-common/pom.xml
+COPY auth-common/src ./auth-common/src
+RUN mvn install -f auth-common/pom.xml -q
+COPY {service}/pom.xml ./{service}/pom.xml
+COPY {service}/src ./{service}/src
+RUN mvn package -f {service}/pom.xml -DskipTests -q
+
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+COPY --from=build /app/{service}/target/*.jar app.jar
+EXPOSE {port}
+ENTRYPOINT ["java", "-jar", "app.jar"]
+Build context is always project root (context: .) so the parent POM and auth-common are accessible.
+
+Docker Compose structure
+postgres (port 5433:5432) — postgres:16-alpine, named volume, healthcheck with pg_isready, mounts ./db-init to /docker-entrypoint-initdb.d
+mongodb (port 27017) — mongo:7-jammy, named volume, healthcheck with mongosh ping
+eureka-server — depends_on postgres: condition: service_healthy
+All services — depends_on eureka-server: condition: service_healthy, receive SPRING_DATASOURCE_URL, SPRING_DATASOURCE_USERNAME, SPRING_DATASOURCE_PASSWORD, JWT_SECRET, EUREKA_CLIENT_SERVICEURL_DEFAULTZONE as environment variables
+audit-trail-service additionally depends on mongodb: condition: service_healthy, receives SPRING_DATA_MONGODB_URI and AUDIT_MONGODB_ENABLED
+frontend — built from React project, served via nginx on port 3000
+Startup order
+Eureka (wait for healthy)
+audit-trail
+user-service
+all other services in any order
+Audit trail service — dual database design
+PostgreSQL (audit_summary table): username, role, serviceName, summaryDate, totalCalls, errorCalls, avgDurationMs. Upserted per request — rolling average duration calculated incrementally. Used for dashboard charts and aggregation queries.
+
+MongoDB (audit_logs collection): full document per API call with TTL index (expireAfterSeconds: 7776000 = 90 days auto-delete). Used for drill-down investigation.
+
+PostgresConfig is @Primary. MongoConfig is @ConditionalOnProperty(havingValue="true"). Both use @Enable*Repositories scoped to separate packages to prevent Spring from misrouting repository beans.
+
+AuditService uses @Autowired(required = false) for the Mongo repository and checks isMongoEnabled() before every Mongo operation. Returns emptyPage() when disabled.
+
+Flutter app — planned next phase
+The Flutter app will be a multiplatform client (iOS, Android, Web, Desktop) consuming the exact same Spring Boot backend. Key things to carry forward:
+
+All API base URLs and endpoint paths are identical
+JWT flow is identical: login → store access + refresh tokens → attach Bearer header → auto-refresh on 401/403
+Same three roles with same access rules
+Same response shape — always unwrap responsePayload
+Same order lifecycle: CREATED → CONFIRMED → PARTIALLY_PAID → FULLY_PAID
+Warehouse stock uses productCode for user-facing input but submits productId internally
+Product search/lookup in stock modal and add-line-item modal is by productCode, displaying productId + productName
+Dispatch sheet is exclusively for FULLY_PAID orders, grouped by warehouse
+Excel import/export not applicable in Flutter mobile — replace with camera-based barcode scan for product lookup or native file picker for CSV import
+warehouseQuantities on line items is a map { "wareId": qty } — used for warehouse-wise dispatch breakdown
+All dates from API are ISO 8601 strings or LocalDate formatted as yyyy-MM-dd
+
+
