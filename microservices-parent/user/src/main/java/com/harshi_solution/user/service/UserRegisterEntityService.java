@@ -76,7 +76,7 @@ public class UserRegisterEntityService implements UserDetailsService {
         userRepository.save(user);
     }
 
-      public void registerWarehouse(RegisterRequest request) {
+    public void registerWarehouse(RegisterRequest request) {
 
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("Username already exists");
@@ -108,7 +108,17 @@ public class UserRegisterEntityService implements UserDetailsService {
                 .orElseThrow(() -> new RuntimeException(
                         "Viewer not found with id: " + id));
 
-        // Then delete linked user
         userRepository.delete(user);
+    }
+
+    @Transactional
+    public void editUserEntityById(@NonNull Long id, RegisterRequest request) {
+
+        UserRegisterEntity existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        existingUser.setUsername(request.getUsername());
+        existingUser.setPassword(passwordEncoder.encode(request.getPassword()));
+        userRepository.save(existingUser);
     }
 }

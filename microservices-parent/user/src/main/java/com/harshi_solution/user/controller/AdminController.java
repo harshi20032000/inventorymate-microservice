@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,11 +56,11 @@ public class AdminController {
     }
 
     @PostMapping("/register-warehouse")
-public BaseUIResponse<String> registerWarehouse(
-        @RequestBody RegisterRequest request) {
-    userRegisterEntityService.registerWarehouse(request);
-    return ResponseBuilder.success("Warehouse manager registered successfully", null);
-}
+    public BaseUIResponse<String> registerWarehouse(
+            @RequestBody RegisterRequest request) {
+        userRegisterEntityService.registerWarehouse(request);
+        return ResponseBuilder.success("Warehouse manager registered successfully", null);
+    }
 
     @GetMapping("/users")
     public BaseUIResponse<List<UserResponseDTO>> getUsersByRole(
@@ -71,7 +72,7 @@ public BaseUIResponse<String> registerWarehouse(
         return response;
     }
 
-    @Operation(summary = "delete Viewer using Id", description = "used to delete Viewer using Id")
+    @Operation(summary = "delete Viewer/Warehouse Manager using Id", description = "used to delete Viewer/Warehouse Manager using Id")
     @DeleteMapping("/{id}")
     public BaseUIResponse<String> deleteViewer(
             @PathVariable @NonNull Long id) {
@@ -84,4 +85,18 @@ public BaseUIResponse<String> registerWarehouse(
 
         return response;
     }
-}
+
+    @Operation(summary = "edit Viewer/Warehouse Manager using Id", description = "used to edit Viewer/Warehouse Manager using Id")
+    @PutMapping("/edit/{id}")
+    public BaseUIResponse<String> editUserEntity(
+            @PathVariable @NonNull Long id,
+            @Valid @RequestBody RegisterRequest request) {
+        userRegisterEntityService.editUserEntityById(id, request);
+
+        BaseUIResponse<String> response = new BaseUIResponse<>();
+        response.setResponsePayload(
+                "User with ID " + id + " edited successfully.");
+
+        return response;
+    }
+} 
