@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication(scanBasePackages = "com.harshi_solution")
-@EnableFeignClients(basePackages = "com.harshi_solution.auth.audit")
+@EnableFeignClients(basePackages = "com.harshi_solution.")
 public class WarehouseApplication {
 
 	public static void main(String[] args) {

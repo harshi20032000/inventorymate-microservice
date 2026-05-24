@@ -83,4 +83,9 @@ public class ProductController {
                 "Product deleted successfully",
                 null);
     }
+
+    @GetMapping("/{id}/name")
+    public BaseUIResponse<String> getProductName(@PathVariable Long id) {
+        return ResponseBuilder.success("success", productService.getProductById(id).getProductName());
+    }
 }

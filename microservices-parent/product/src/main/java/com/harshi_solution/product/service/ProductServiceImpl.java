@@ -70,11 +70,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(Long productId) {
-
+        
         Product product = findProductOrThrow(productId);
         productRepository.delete(product);
     }
-
+    
     // -------------------------------
     // 🔹 Private helper methods
     // -------------------------------
@@ -95,4 +95,5 @@ public class ProductServiceImpl implements ProductService {
 
         return dto;
     }
+
 }
