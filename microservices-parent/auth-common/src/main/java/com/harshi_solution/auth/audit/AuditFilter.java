@@ -1,11 +1,8 @@
 package com.harshi_solution.auth.audit;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
-import javax.crypto.SecretKey;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +15,6 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import com.harshi_solution.auth.JWTUtil;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,11 +28,6 @@ public class AuditFilter extends OncePerRequestFilter {
     // header name for passing correlation ID between services
     public static final String CORRELATION_HEADER         = "X-Correlation-Id";
     public static final String BUSINESS_CORRELATION_HEADER = "X-Business-Correlation-Id";
-
-    private static final String SECRET_KEY = "your-secure-secret-key-min-32bytes";
-
-    private static final SecretKey key = Keys.hmacShaKeyFor(
-            SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
     @Value("${spring.application.name:unknown}")
     private String serviceName;
