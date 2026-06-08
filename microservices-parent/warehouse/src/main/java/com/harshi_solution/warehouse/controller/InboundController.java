@@ -24,7 +24,7 @@ import com.harshi_solution.warehouse.service.InboundService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/inbound")
+@RequestMapping("/api/v1/inbound")
 public class InboundController {
 
     private final InboundService inboundService;
@@ -37,9 +37,8 @@ public class InboundController {
 
     @PostMapping("/sessions")
     public BaseUIResponse<InboundSessionDto> createSession(
-            @Valid @RequestBody CreateSessionRequest req,
-            @RequestHeader("X-Username") String createdBy) {
-        return ResponseBuilder.success("Session created successfully", inboundService.createSession(req, createdBy));
+            @Valid @RequestBody CreateSessionRequest req) {
+        return ResponseBuilder.success("Session created successfully", inboundService.createSession(req));
 
     }
 

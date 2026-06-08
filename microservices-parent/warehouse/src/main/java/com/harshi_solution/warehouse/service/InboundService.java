@@ -66,13 +66,13 @@ public class InboundService {
      * Admin creates a session when a truck arrives.
      */
     public InboundSessionDto createSession(
-            CreateSessionRequest req, String createdBy) {
+            CreateSessionRequest req) {
 
         InboundSession session = new InboundSessionBuilder()
                 .wareId(req.wareId())
                 .truckRef(req.truckRef())
                 .status(InboundStatus.OPEN)
-                .createdBy(createdBy)
+                .createdBy("DEFAULT")
                 .build();
 
         return toSessionDto(sessionRepo.save(session));

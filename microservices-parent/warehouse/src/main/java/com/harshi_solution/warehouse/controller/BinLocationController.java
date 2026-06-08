@@ -24,7 +24,7 @@ import com.harshi_solution.warehouse.service.BinLocationService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/warehouses")
+@RequestMapping("/api/v1/location")
 public class BinLocationController {
 
     private final BinLocationService binLocationService;
